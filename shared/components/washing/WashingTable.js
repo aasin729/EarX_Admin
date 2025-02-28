@@ -32,12 +32,11 @@ const WashingTable = ({ data, setData }) => {
     {
       headerName: '총 수량',
       cellStyle: { textAlign: 'center' },
-      formattedValue: (params) => {
+      valueFormatter: (params) => {
         return (
           params.data[washKeys.waitQuantity] +
           params.data[washKeys.onWashingQuantity] +
-          params.data[washKeys.finishQuantity] +
-          '개'
+          params.data[washKeys.finishQuantity]
         );
       },
     },
@@ -60,7 +59,7 @@ const WashingTable = ({ data, setData }) => {
 
   const router = useRouter();
   const viewWashingDetail = (data) => {
-    router.push(`/washing/${data[washKeys.id]}`);
+    router.push(`/washing-management/detail/${data[washKeys.id]}`);
   };
 
   return (

@@ -72,7 +72,7 @@ export const RadioInput = forwardRef(
 
 export const Checkbox = ({ name, id, label, labelClass }) => {
   return (
-    <div className="form-check">
+    <div className="form-check mb-0">
       <input className="form-check-input" type="checkbox" name={name} id={id} />
       <label className={`form-check-label ${labelClass ?? ''}`} htmlFor={id}>
         {label}

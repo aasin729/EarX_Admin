@@ -6,16 +6,15 @@ import {
   Checkbox,
   InputWrapper,
 } from '@/shared/layout-components/styles/input';
-import DatePicker from '../DatePicker';
 import {
   Card,
   Height,
   Width,
 } from '@/shared/layout-components/spaces/SpacesComponenet';
 import { useState } from 'react';
-import { PrimaryButton } from '@/shared/layout-components/styles/button';
 import WashingTable from './WashingTable';
 import { washKeys } from '@/shared/functions/keys';
+import { PrimaryButton } from '@/shared/layout-components/styles/button';
 
 const Washing = () => {
   const searchType = [
@@ -24,29 +23,17 @@ const Washing = () => {
     { value: '3', label: '품목 번호' },
   ];
 
-  const periodType = [
-    { value: '1', label: '세탁 신청일' },
-    { value: '2', label: '회수 예정일' },
-  ];
-
-  const [date, setDate] = useState({
-    startDate: undefined,
-    endDate: undefined,
-  });
-
   const [data, setData] = useState([
     {
-      [washKeys.requestUid]: '143143141',
-      [washKeys.requestDate]: '2021-08-31',
-      [washKeys.productUid]: '123123',
-      [washKeys.productName]: '품목명',
-      [washKeys.requestQuantity]: 3,
-      [washKeys.estimatedDate]: '2021-09-01',
-      [washKeys.company]: '요청 업체',
-      [washKeys.deliveryStatus]: '배송 상태',
-      [washKeys.sendDate]: '2021-09-01',
-      [washKeys.washStatus]: '세탁 대기',
-      [washKeys.returnStatus]: '회수 완료',
+      [washKeys.id]: '1',
+      [washKeys.category1]: '143143141',
+      [washKeys.category2]: '2021-08-31',
+      [washKeys.category3]: '123123',
+      [washKeys.productUid]: '품목명',
+      [washKeys.productName]: 3,
+      [washKeys.waitQuantity]: 100,
+      [washKeys.onWashingQuantity]: 200,
+      [washKeys.finishQuantity]: 100,
     },
   ]);
 
@@ -75,6 +62,10 @@ const Washing = () => {
         <Height height="1rem" />
         <Flex>
           <Checkbox name="cumulative" id="cumulative" label="누적" />
+          <div className="text-secondary ms-4 mb-1">
+            누적 체크 시 회수 완료된 수량까지 합산되어 조회됩니다.​
+          </div>
+          <PrimaryButton className={'ms-auto'}>검색</PrimaryButton>
         </Flex>
       </GrayCard>
       <Height height="1rem" />

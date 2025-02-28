@@ -26,4 +26,13 @@ export const washKeys = {
   waitQuantity: 'waitQuantity',
   onWashingQuantity: 'onWashingQuantity',
   finishQuantity: 'finishQuantity',
+  orderNumber: 'orderNumber',
+};
+
+export const announcementKeys = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  attachedFile: 'attachedFile',
+  createdAt: 'createdAt',
 };
