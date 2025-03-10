@@ -28,7 +28,6 @@ import {
   HiChevronRight,
 } from 'react-icons/hi';
 import { LuEllipsis } from 'react-icons/lu';
-import { InputWrapper } from '../layout-components/styles/input';
 ModuleRegistry.registerModules([
   AllCommunityModule,
   // RichSelectModule,
@@ -148,7 +147,7 @@ const GridComponent = ({
 
   const [currentPage, setCurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-  const [dataLength, setDataLength] = useState(125);
+  const [dataLength, setDataLength] = useState(10);
 
   const totalPage = useMemo(() => {
     return Math.ceil(dataLength / pageSize);

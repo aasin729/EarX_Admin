@@ -36,3 +36,14 @@ export const announcementKeys = {
   attachedFile: 'attachedFile',
   createdAt: 'createdAt',
 };
+
+export const calcKeys = {
+  id: 'id',
+  price: 'price',
+  total: 'total',
+  order: 'order',
+  calc: 'calc',
+  spendDeposit: 'spendDeposit',
+  createdAt: 'createdAt',
+  company: 'company',
+};
