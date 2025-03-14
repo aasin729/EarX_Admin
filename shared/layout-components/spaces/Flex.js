@@ -8,6 +8,7 @@ export const Flex = styled.div`
   flex-wrap: ${(props) => props.wrap || 'nowrap'};
   gap: ${(props) => props.gap || '0'};
   padding: ${(props) => props.padding || '0'};
+  margin: ${(props) => props.margin || '0'};
   background-color: ${(props) => props.bgColor || 'transparent'};
   height: ${(props) => props.height || 'auto'};
   width: ${(props) => props.width || 'auto'};

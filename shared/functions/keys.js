@@ -10,6 +10,7 @@ export const washKeys = {
   registeredDelivery: 'registeredDelivery',
   productName: 'productName',
   productUid: 'productUid',
+  quantity: 'quantity',
   requestQuantity: 'requestQuantity',
   stockQuantity: 'stockQuantity',
   returnQuantity: 'returnQuantity',
