@@ -2,7 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 
 const Seo = ({ title }) => {
-  let i = `Nowa - ${title}`;
+  let i = `Lucicare - 세탁관리자 - ${title}`;
   return (
     <Head>
       <title>{i}</title>

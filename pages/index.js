@@ -101,14 +101,12 @@ export default function Home() {
                   {/* <!-- Demo content--> */}
                   <div className="main-card-signin d-md-flex">
                     <div className="wd-100p">
-                      <div className="d-flex mb-4">
-                        <Link href={`/components/dashboards/dashboard1/`}>
-                          <img
-                            src={'./assets/img/brand/favicon.png'}
-                            className="sign-favicon ht-40"
-                            alt="logo"
-                          />
-                        </Link>
+                      <div className="d-flex mb-2">
+                        <img
+                          src={`${process.env.NODE_ENV === 'production' ? basePath : ''}/assets/img/brand/logo.svg`}
+                          className="sign-favicon"
+                          alt="logo"
+                        />
                       </div>
                       <div className="">
                         <div className="main-signup-header">
