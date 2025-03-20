@@ -93883,3 +93883,11 @@ h2.swal2-title {
 .quill {
   flex-grow: 1;
 }
+
+.profile-wrapper {
+  width: 45px;
+  border-radius: 50%;
+  overflow: hidden;
+  padding: 0;
+  display: block;
+}

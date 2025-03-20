@@ -4,8 +4,10 @@ import {
   Width,
 } from '@/shared/layout-components/spaces/SpacesComponenet';
 import { Flex } from '@/shared/layout-components/spaces/Flex';
+import { useRouter } from 'next/router';
 
 const AnnouncementComponent = ({ data }) => {
+  const router = useRouter();
   return (
     <>
       <Card>
@@ -13,7 +15,13 @@ const AnnouncementComponent = ({ data }) => {
           <Flex direction="column" gap="1rem" align="flex-start" width="100%">
             {data.length > 0 ? (
               data.map((item, index) => (
-                <Flex key={`announcement_${index}`} gap="1rem" width="100%">
+                <Flex
+                  key={`announcement_${index}`}
+                  gap="1rem"
+                  width="100%"
+                  className="pointer"
+                  onClick={() => router.push(`/announcement/detail/${item.id}`)}
+                >
                   <Width
                     width={'80%'}
                     overflow="hidden"

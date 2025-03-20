@@ -10,7 +10,7 @@ const AnnouncementInfo = ({ data }) => {
   return (
     <>
       <HorizontalLine />
-      <Height height="3rem" />
+      <Height height="1.5rem" />
       <Flex height="2rem" gap="1rem">
         <Width width="7rem">
           <BoldText>제목</BoldText>
@@ -39,6 +39,9 @@ const AnnouncementInfo = ({ data }) => {
           <BoldText>첨부파일</BoldText>
         </Width>
       </Flex>
+
+      <Height height="1.5rem" />
+      <HorizontalLine />
     </>
   );
 };

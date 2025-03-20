@@ -1,5 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
+import favicon from '../../../public/assets/img/brand/favicon.png';
 
 const Seo = ({ title }) => {
   let i = `Lucicare - 세탁관리자 - ${title}`;
@@ -33,6 +34,7 @@ react admin dashboard template
 dashboard template react bootstrap
 admin and dashboard template"
       ></meta>
+      <link rel="icon" href={favicon.src} />
     </Head>
   );
 };
