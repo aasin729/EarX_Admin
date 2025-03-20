@@ -57,7 +57,6 @@ const OrderTable = ({ data, setData }) => {
       field: washKeys.washStatus,
       headerName: '세탁 현황',
       editable: true,
-      cellStyle: { textAlign: 'center' },
       cellEditor: 'agSelectCellEditor',
       cellEditorParams: {
         values: ['세탁 대기', '세탁중', '세탁 완료'],
@@ -65,6 +64,8 @@ const OrderTable = ({ data, setData }) => {
       cellRenderer: (params) => (
         <TableSelectEditRenderer value={params.data[washKeys.washStatus]} />
       ),
+      // onCellValueChanged: (params) => {},
+      cellStyle: { textAlign: 'center' },
     },
     {
       field: washKeys.returnStatus,

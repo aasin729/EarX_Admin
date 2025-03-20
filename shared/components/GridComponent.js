@@ -7,16 +7,6 @@ import React, {
 } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
-
-// import { RichSelectModule } from 'ag-grid-enterprise';
-
-// import {
-//   ColumnMenuModule,
-//   ColumnsToolPanelModule,
-//   ContextMenuModule,
-//   RowGroupingModule,
-// } from 'ag-grid-enterprise';
-
 import SelectBox from './SelectBox';
 import { SecondaryButton } from '../layout-components/styles/button';
 import { Flex } from '../layout-components/spaces/Flex';
@@ -28,14 +18,8 @@ import {
   HiChevronRight,
 } from 'react-icons/hi';
 import { LuEllipsis } from 'react-icons/lu';
-ModuleRegistry.registerModules([
-  AllCommunityModule,
-  // RichSelectModule,
-  // ColumnMenuModule,
-  // ColumnsToolPanelModule,
-  // ContextMenuModule,
-  // RowGroupingModule,
-]);
+
+ModuleRegistry.registerModules([AllCommunityModule]);
 
 const GridComponent = ({
   data,
