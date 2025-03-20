@@ -52,7 +52,7 @@ const Contentlayout = ({ children }) => {
   return (
     <>
       <Head>
-        <title>Nowa</title>
+        <title>Lucicare - 세탁관리자</title>
         <meta name="description" content="Spruha" />
         <link rel="icon" href={favicon.src} />
       </Head>
