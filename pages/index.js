@@ -73,7 +73,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Nowa</title>
+        <title>Lucicare</title>
         <meta name="description" content="Spruha" />
         <link rel="icon" href={favicon.src} />
       </Head>
