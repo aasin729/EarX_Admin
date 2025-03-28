@@ -8,6 +8,7 @@ import Modal from '@/shared/components/Modal';
 import { useSwal } from '@/shared/hooks/useSwal';
 import { useDispatch, useSelector } from 'react-redux';
 import { LOGOUT_USER } from '@/shared/redux/actions/action';
+import { RiUserHeartLine } from 'react-icons/ri';
 
 export default function Header() {
   let { basePath, push } = useRouter();
@@ -27,11 +28,7 @@ export default function Header() {
               환영합니다.
             </div>
             <Link href="/profile" className="profile-wrapper">
-              <img
-                alt="프로필사진"
-                src={`${process.env.NODE_ENV === 'production' ? basePath : ''}/assets/img/faces/2.jpg`}
-                className=""
-              />
+              <RiUserHeartLine className="fs-5" />
             </Link>
             <DefaultButton
               onClick={() => {

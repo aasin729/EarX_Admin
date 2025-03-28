@@ -18,12 +18,10 @@ import {
   HiChevronRight,
 } from 'react-icons/hi';
 import { LuEllipsis } from 'react-icons/lu';
-
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const GridComponent = ({
   data,
-  setData,
   fitRowWidth,
   columns,
   extraButton,
@@ -35,9 +33,15 @@ const GridComponent = ({
   selection,
   setSelectionArray,
   clearSelection,
+  changePageAction,
+  searchText,
+  listLength,
+  onChangePerPage,
 }) => {
+  //테이블 ref
   const gridApiRef = useRef(null);
 
+  //체크박스 선택을 위한 설정
   const rowSelection = useMemo(() => {
     return {
       mode: 'multiRow',
@@ -46,6 +50,7 @@ const GridComponent = ({
     };
   }, []);
 
+  //가로 스크롤이 생기면서 컬럼이 잘리는 현상을 해결하기 위한 함수
   const onGridSizeChanged = useCallback(
     (params) => {
       const gridWidth = document.querySelector('.ag-body-viewport').clientWidth;
@@ -73,6 +78,7 @@ const GridComponent = ({
     [window],
   );
 
+  //페이지네이션 안에 한 번에 보이는 페이지 설정
   const paginationPageSizeSelector = useMemo(() => {
     return [
       { value: 10, label: '10개씩 보기' },
@@ -82,33 +88,52 @@ const GridComponent = ({
     ];
   }, []);
 
+  //테이블 ref 설정
   const onGridReady = useCallback((params) => {
     gridApiRef.current = params.api;
-    fetch('https://www.ag-grid.com/example-assets/olympic-winners.json')
-      .then((resp) => resp.json())
-      .then((data) => {
-        // setData(data);
-      });
   }, []);
 
+  //정렬 설정
+  const [sortField, setSortField] = useState('');
+  const [sortOrder, setSortOrder] = useState('');
+
+  //정렬 변경 시 이벤트
+  const onSortChanged = (params) => {
+    console.log(params.api.getColumnState());
+    const sortModel = params.api
+      .getColumnState()
+      .find((col) => col.sort !== null);
+    if (sortModel) {
+      const { colId, sort } = sortModel;
+      console.log(colId, sort);
+      setSortField(colId);
+      setSortOrder(sort);
+    } else {
+      setSortField('');
+      setSortOrder('');
+    }
+  };
+
+  //체크박스 선택 시 이벤트
   const handleButtonClick = () => {
     const selectedNodes = gridApiRef.current.getSelectedNodes();
     const selectedData = selectedNodes.map((node) => node.data);
     setSelectionArray(selectedData);
   };
 
+  //체크박스 전체 선택 해제
   const handleDeselectAll = () => {
     if (gridApiRef.current) {
       gridApiRef.current.deselectAll();
     }
   };
-
   useEffect(() => {
     if (clearSelection) {
       handleDeselectAll();
     }
   }, [clearSelection]);
 
+  //페이지네이션 버튼 이벤트 - 처음, 마지막, 다음, 이전, 해당 index
   const onBtFirst = useCallback(() => {
     setCurrentPage(0);
   }, []);
@@ -129,13 +154,25 @@ const GridComponent = ({
     setCurrentPage(index);
   }, []);
 
+  //현재 페이지, 페이지 사이즈 설정
   const [currentPage, setCurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-  const [dataLength, setDataLength] = useState(10);
 
+  //데이터 길이
+  const dataLength = useMemo(() => {
+    return listLength ?? 0;
+  }, [listLength]);
+
+  //전체 페이지 수
   const totalPage = useMemo(() => {
     return Math.ceil(dataLength / pageSize);
   }, [dataLength, pageSize]);
+
+  useEffect(() => {
+    if (changePageAction) {
+      changePageAction(currentPage, pageSize, searchText);
+    }
+  }, [currentPage, pageSize, searchText, sortField, sortOrder]);
 
   return (
     <div className="w-100">
@@ -146,6 +183,7 @@ const GridComponent = ({
               options={paginationPageSizeSelector}
               defaultValue={paginationPageSizeSelector[0]}
               onChange={(option) => setPageSize(option.value)}
+              isDisabled={onChangePerPage}
             />
           </Width>
         )}
@@ -174,11 +212,8 @@ const GridComponent = ({
             onCellValueChanged={onCellValueChanged ?? undefined}
             noRowsOverlayComponent={() => <div>데이터가 없습니다.</div>}
             enableCellSpan={enableCellSpan}
-            // suppressScrollOnNewData={true}
-            // defaultColDef={defaultColDef}
             rowSelection={selection ? rowSelection : undefined}
-            // paginationPageSizeSelector={paginationPageSizeSelector}
-            // onPaginationChanged={onPaginationChanged}
+            onSortChanged={onSortChanged}
           />
         </div>
       </div>
@@ -254,25 +289,6 @@ const GridComponent = ({
           </Flex>
         </>
       )}
-      {/* <div style={{ marginTop: '6px' }}>
-        <span className="label">Last Page Found:</span>
-        <span className="value" id="lbLastPageFound">
-          -
-        </span>
-        <span className="label">Page Size:</span>
-        <span className="value" id="lbPageSize">
-          {pageSize}
-        </span>
-        <span className="label">Total Pages:</span>
-        <span className="value" id="lbTotalPages">
-          {totalPage}
-        </span>
-        <span className="label">Current Page:</span>
-        <span className="value" id="lbCurrentPage">
-          {currentPage + 1}
-          {currentPage === 0 ? 'true' : 'false'}
-        </span>
-      </div> */}
     </div>
   );
 };
