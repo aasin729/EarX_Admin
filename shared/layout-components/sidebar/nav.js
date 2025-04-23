@@ -1,4 +1,5 @@
 import { basePath } from '@/next.config';
+import { AiOutlineFileDone } from 'react-icons/ai';
 
 const path = `${process.env.NODE_ENV === 'production' ? basePath : ''}/assets/img/svgicons/sidebar`;
 
@@ -49,6 +50,15 @@ export const MENUITEMS = [
         title: '공지사항',
         icon: <img src={`${path}/announce-inactive.svg`} />,
         activeIcon: <img src={`${path}/announce-active.svg`} />,
+      },
+      {
+        type: 'link',
+        path: '/report-management',
+        selected: false,
+        active: false,
+        title: '리포트 관리',
+        icon: <AiOutlineFileDone className="fs-5 text-gray" />,
+        activeIcon: <AiOutlineFileDone className="fs-5 text-primary" />,
       },
     ],
   },

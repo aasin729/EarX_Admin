@@ -11,3 +11,11 @@ export const typingOnlyNumber = (e) => {
 };
 
 export const currencyFormatter = new Intl.NumberFormat('ko');
+
+//합계
+export const sumBy = (arr, key) =>
+  arr.reduce((acc, item) => acc + (item[key] || 0), 0);
+
+//평균
+export const avgBy = (arr, key) =>
+  arr.length ? sumBy(arr, key) / arr.length : 0;

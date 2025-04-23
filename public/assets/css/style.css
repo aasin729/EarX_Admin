@@ -93891,3 +93891,11 @@ h2.swal2-title {
   padding: 0;
   display: block;
 }
+
+.text-gray {
+  color: rgb(149, 159, 184);
+}
+
+.react-datepicker-wrapper {
+  width: 100%;
+}

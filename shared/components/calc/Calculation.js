@@ -12,6 +12,7 @@ import { PrimaryButton } from '@/shared/layout-components/styles/button';
 import CalcTable from './CalcTable';
 import { useState } from 'react';
 import { calcKeys } from '@/shared/functions/keys';
+import PeriodInputs from '../report/PeriodInputs';
 
 const Calculation = () => {
   const [tableData, setTableData] = useState([
@@ -110,15 +111,11 @@ const Calculation = () => {
     <Card>
       <GrayCard>
         <Flex gap="0.5rem">
-          <BoldText className="pe-2">회수 완료일</BoldText>
-          <Width width={'180px'}>
-            <DatePicker selected={new Date()} />
+          <PeriodInputs onlyDay title="회수 완료일" />
+          <Width width="5rem" />
+          <Width width="5.6rem">
+            <BoldText>신청 업체</BoldText>
           </Width>
-          ~
-          <Width width={'180px'} className="me-3">
-            <DatePicker selected={new Date()} />
-          </Width>
-          <BoldText className="pe-2">신청 업체</BoldText>
           <Width width={'250px'}>
             <SelectBox className="w-100" placeholder="전체" />
           </Width>
