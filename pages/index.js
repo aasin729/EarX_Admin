@@ -146,7 +146,7 @@ export default function Home() {
                                     <Form.Label>Email</Form.Label>
                                     <Form.Control
                                       className="form-control"
-                                      placeholder="Enter your email"
+                                      placeholder="이메일 주소를 입력하세요."
                                       type="text"
                                       name="email"
                                       value={email}
@@ -158,11 +158,12 @@ export default function Home() {
                                     <Form.Label>Password</Form.Label>
                                     <Form.Control
                                       className="form-control"
-                                      placeholder="Enter your password"
+                                      placeholder="비밀번호를 입력하세요."
                                       type="password"
                                       name="password"
                                       value={password}
                                       onChange={changeHandler}
+                                      onKeyUp={handleEnter}
                                       required
                                     />
                                   </Form.Group>
