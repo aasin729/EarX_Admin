@@ -14,7 +14,7 @@ const nextConfig = {
     styledComponents: true,
   },
   async rewrites() {
-    const paths = ['/auth/logout', '/auth/login'];
+    const paths = ['/auth/:path', '/laundry', '/laundry/:path*'];
 
     return paths.map((path) => ({
       source: path,

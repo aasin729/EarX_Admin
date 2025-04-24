@@ -1,17 +1,26 @@
 import Head from 'next/head';
-import { Inter } from 'next/font/google';
 import favicon from '../public/assets/img/brand/favicon.png';
-import styles from '@/styles/Home.module.scss';
-import { Alert, Button, Col, Form, Row, Tab, Tabs } from 'react-bootstrap';
+import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Seo from '@/shared/layout-components/seo/seo';
-import { auth } from '../shared/firebase/firebase';
 import { useDispatch } from 'react-redux';
 import { LOGIN_USER } from '@/shared/redux/actions/action';
+import useFetch from '@/shared/hooks/useFetch';
 
+let hasLoggedOut = false;
 export default function Home() {
+  const { logoutAction, loginAction } = useFetch();
+  let navigate = useRouter();
+
+  useEffect(() => {
+    if (!hasLoggedOut) {
+      logoutAction();
+      hasLoggedOut = true; // 실행 상태 저장
+    }
+  }, []);
+
   useEffect(() => {
     if (document.body) {
       document
@@ -24,51 +33,64 @@ export default function Home() {
     };
   }, []);
 
-  // Firebase
   const [err, setError] = useState('');
+  
+  const handleEnter = (event) => {
+    if (event.key === 'Enter') {
+      ReactLogin();
+    }
+  };
+  
   const [data, setData] = useState({
-    email: 'adminnextjs@gmail.com',
-    password: '1234567890',
+    email: '',
+    password: '',
+    user_type: '세탁업체',
   });
+
   const { email, password } = data;
+
   const changeHandler = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
     setError('');
   };
-  let navigate = useRouter();
-  const routeChange = () => {
-    let path = `/dashboard`;
+  
+  const routeChange = (first) => {
+    let path = first ? '/change-password' : `/dashboard`;
     navigate.push(path);
   };
 
   const dispatch = useDispatch();
 
-  const ReactLogin = (e) => {
-    console.log(data);
-    if (
-      data.email == 'adminnextjs@gmail.com' &&
-      data.password == '1234567890'
-    ) {
-      routeChange();
-      dispatch(
-        LOGIN_USER({
-          email: data.email,
-          password: data.password,
-          role: '관리자',
-          name: '이정재',
-          company: '그린워싱',
-        }),
-      );
-    } else {
-      setError('The Auction details did not Match');
-      setData({
-        email: 'adminnextjs@gmail.com',
-        password: '1234567890',
-      });
+  const [loading, setLoading] = useState(false);
+
+  const ReactLogin = async () => {
+    try {
+      const response = await loginAction('/auth/login', data);
+      console.log(response);
+
+      if (response.dataStatus !== 200) {
+        setError('이메일 또는 비밀번호를 확인하여 주십시오.');
+      } else {
+        setLoading(true);
+        routeChange(response.user.is_first);
+        dispatch(
+          LOGIN_USER({
+            email: data.email,
+            role: response.user.user_type,
+            id: response.user.id,
+            name: response.user.username,
+            company: response.user.company_info.name,
+            phone: response.user.user_phone,
+            companyId: response.user.company_info.id,
+            access_token: response.access_token,
+          }),
+        );
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('로그인 중 오류가 발생했습니다. 다시 시도해 주세요.');
     }
   };
-
-  const [key, setKey] = useState('firebase');
 
   return (
     <>
@@ -78,11 +100,11 @@ export default function Home() {
         <link rel="icon" href={favicon.src} />
       </Head>
       <Seo title={'Login'} />
+      {loading && <ScreenLoader />}
       <div className="square-box">
-        {' '}
-        <div></div> <div></div> <div></div> <div></div> <div></div> <div></div>{' '}
-        <div></div> <div></div> <div></div> <div></div> <div></div> <div></div>{' '}
-        <div></div> <div></div> <div></div>{' '}
+        <div></div> <div></div> <div></div> <div></div> <div></div> <div></div>
+        <div></div> <div></div> <div></div> <div></div> <div></div> <div></div>
+        <div></div> <div></div> <div></div>
       </div>
 
       <div className="page">
@@ -121,7 +143,7 @@ export default function Home() {
                               <div className="tabs-menu1">
                                 <Form action="#">
                                   <Form.Group className="form-group">
-                                    <Form.Label>Email</Form.Label>{' '}
+                                    <Form.Label>Email</Form.Label>
                                     <Form.Control
                                       className="form-control"
                                       placeholder="Enter your email"
@@ -133,7 +155,7 @@ export default function Home() {
                                     />
                                   </Form.Group>
                                   <Form.Group className="form-group">
-                                    <Form.Label>Password</Form.Label>{' '}
+                                    <Form.Label>Password</Form.Label>
                                     <Form.Control
                                       className="form-control"
                                       placeholder="Enter your password"

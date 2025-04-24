@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navbar, Dropdown, Badge, Button } from 'react-bootstrap';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -9,15 +9,42 @@ import { useSwal } from '@/shared/hooks/useSwal';
 import { useDispatch, useSelector } from 'react-redux';
 import { LOGOUT_USER } from '@/shared/redux/actions/action';
 import { RiUserHeartLine } from 'react-icons/ri';
+import useFetch from '@/shared/hooks/useFetch';
 
 export default function Header() {
-  let { basePath, push } = useRouter();
+  let { pathname, push } = useRouter();
 
-  const user = useSelector((state) => state.User);
+  // const user = useSelector((state) => state.User);
+  
+  const [user, setUser] = useState({
+    company: '',
+    name: '',
+    role: '세탁업체',
+  });
+
 
   const { confirm } = useSwal();
   const dispatch = useDispatch();
 
+  const { logoutAction, getAction } = useFetch();
+
+  const getMyInfo = async () => {
+    const res = await getAction('/auth/me');
+    if (res) {
+      // (res.status === 401 || res.detail === 'Signature has expired') &&
+      //   logoutAction(res.status);
+        console.log(res)
+      setUser({
+        ...user,
+        company: res.company_info?.name,
+        name: res.username,
+      });
+    }
+  };
+
+  useEffect(() => {
+    getMyInfo();
+  }, [pathname]);
   return (
     <Navbar className="main-header side-header sticky nav nav-item">
       <div className="main-container container-fluid">
