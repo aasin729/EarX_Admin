@@ -17,20 +17,18 @@ const Dashboard = () => {
       {
         [announcementKeys.id]: 1,
         [announcementKeys.title]:
-          '공지사항1공지사항1공지사항1공지사항1공지사항1공지사항1공지사항1공지사항1공지사항1',
-        [announcementKeys.createdAt]: '2021-10-01',
+          '2024년 4월 세탁물 수거 일정 변경 안내 (공휴일 조정)',
+        [announcementKeys.createdAt]: '2024-04-23',
       },
       {
         [announcementKeys.id]: 2,
-        [announcementKeys.title]:
-          '공지사항2공지사항2공지사항2공지사항2공지사항2공지사항2공지사항2공지사항2공지사항2',
-        [announcementKeys.createdAt]: '2021-10-01',
+        [announcementKeys.title]: '새로운 세탁물 분류 시스템 도입 및 교육 안내',
+        [announcementKeys.createdAt]: '2024-04-15',
       },
       {
         [announcementKeys.id]: 3,
-        [announcementKeys.title]:
-          '공지사항3공지사항3공지사항3공지사항3공지사항3공지사항3공지사항3공지사항3공지사항3',
-        [announcementKeys.createdAt]: '2021-10-01',
+        [announcementKeys.title]: '세탁물 배송 지연 관련 사과 및 보상 안내',
+        [announcementKeys.createdAt]: '2024-04-10',
       },
     ],
     currentOrder: {
