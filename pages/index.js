@@ -13,6 +13,7 @@ let hasLoggedOut = false;
 export default function Home() {
   const { logoutAction, loginAction } = useFetch();
   let navigate = useRouter();
+  const { basePath } = useRouter();
 
   useEffect(() => {
     if (!hasLoggedOut) {
