@@ -191,77 +191,7 @@ const Order = () => {
     endDate: undefined,
   });
 
-  const [searchState, setSearchState] = useState({
-    searchType: '1',
-    searchKeyword: '',
-    selectedCompany: '',
-    deliveryStatus: '',
-    returnStatus: '',
-    periodType: '1',
-  });
-
   const [data, setData] = useState(initData);
-
-  const handleSearch = () => {
-    let filteredData = [...initData];
-
-    // 검색어 필터링
-    if (searchState.searchKeyword) {
-      filteredData = filteredData.filter((item) => {
-        switch (searchState.searchType) {
-          case '1': // 세탁 주문 번호
-            return item[washKeys.requestUid].includes(
-              searchState.searchKeyword,
-            );
-          case '2': // 품목명
-            return item[washKeys.productName].includes(
-              searchState.searchKeyword,
-            );
-          case '3': // 품목 번호
-            return item[washKeys.productUid].includes(
-              searchState.searchKeyword,
-            );
-          default:
-            return true;
-        }
-      });
-    }
-
-    // 업체 필터링
-    if (searchState.selectedCompany) {
-      filteredData = filteredData.filter(
-        (item) => item[washKeys.company] === searchState.selectedCompany,
-      );
-    }
-
-    // 배송 상태 필터링
-    if (searchState.deliveryStatus) {
-      filteredData = filteredData.filter(
-        (item) => item[washKeys.deliveryStatus] === searchState.deliveryStatus,
-      );
-    }
-
-    // 회수 여부 필터링
-    if (searchState.returnStatus) {
-      filteredData = filteredData.filter(
-        (item) => item[washKeys.returnStatus] === searchState.returnStatus,
-      );
-    }
-
-    // 기간 필터링
-    if (date.startDate && date.endDate) {
-      filteredData = filteredData.filter((item) => {
-        const targetDate = new Date(
-          searchState.periodType === '1'
-            ? item[washKeys.requestDate]
-            : item[washKeys.estimatedDate],
-        );
-        return targetDate >= date.startDate && targetDate <= date.endDate;
-      });
-    }
-
-    setData(filteredData);
-  };
 
   return (
     <Card overflow="visible">
@@ -272,25 +202,10 @@ const Order = () => {
               <BoldText>검색 구분</BoldText>
             </Width>
             <Width width={'10rem'}>
-              <SelectBox
-                options={searchType}
-                defaultValue={searchType[0]}
-                onChange={(e) =>
-                  setSearchState({ ...searchState, searchType: e.target.value })
-                }
-              />
+              <SelectBox options={searchType} defaultValue={searchType[0]} />
             </Width>
             <Width width={'17.4rem'}>
-              <InputWrapper
-                className="w-100"
-                value={searchState.searchKeyword}
-                onChange={(e) =>
-                  setSearchState({
-                    ...searchState,
-                    searchKeyword: e.target.value,
-                  })
-                }
-              />
+              <InputWrapper className="w-100" />
             </Width>
           </Flex>
           <Flex gap="0.5rem">
@@ -302,12 +217,6 @@ const Order = () => {
                 className="w-100"
                 placeholder="전체"
                 options={companyList}
-                onChange={(e) =>
-                  setSearchState({
-                    ...searchState,
-                    selectedCompany: e.target.value,
-                  })
-                }
               />
             </Width>
           </Flex>
@@ -316,16 +225,7 @@ const Order = () => {
               <BoldText>세탁 배송 상태</BoldText>
             </Width>
             <Width width={'10rem'}>
-              <SelectBox
-                placeholder="전체"
-                options={deliveryStatus}
-                onChange={(e) =>
-                  setSearchState({
-                    ...searchState,
-                    deliveryStatus: e.target.value,
-                  })
-                }
-              />
+              <SelectBox placeholder="전체" options={deliveryStatus} />
             </Width>
           </Flex>
         </Flex>
@@ -336,13 +236,7 @@ const Order = () => {
               <BoldText>기간 구분</BoldText>
             </Width>
             <Width width={'10rem'}>
-              <SelectBox
-                options={periodType}
-                defaultValue={periodType[0]}
-                onChange={(e) =>
-                  setSearchState({ ...searchState, periodType: e.target.value })
-                }
-              />
+              <SelectBox options={periodType} defaultValue={periodType[0]} />
             </Width>
             <Width width={'8rem'}>
               <DatePicker
@@ -372,21 +266,10 @@ const Order = () => {
               <BoldText>회수 여부</BoldText>
             </Width>
             <Width width={'10rem'}>
-              <SelectBox
-                placeholder="전체"
-                options={returnStatus}
-                onChange={(e) =>
-                  setSearchState({
-                    ...searchState,
-                    returnStatus: e.target.value,
-                  })
-                }
-              />
+              <SelectBox placeholder="전체" options={returnStatus} />
             </Width>
           </Flex>
-          <PrimaryButton className={'ms-auto'} onClick={handleSearch}>
-            검색
-          </PrimaryButton>
+          <PrimaryButton className={'ms-auto'}>검색</PrimaryButton>
         </Flex>
       </GrayCard>
       <Height height="1rem" />

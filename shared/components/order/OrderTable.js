@@ -75,14 +75,15 @@ const OrderTable = ({ data, setData }) => {
     {
       headerName: '비고',
       cellStyle: { textAlign: 'center' },
-      cellRenderer: (params) => (
-        <PrimaryButton
-          bordered
-          onClick={() => viewDetail(params.data[washKeys.id])}
-        >
-          차감 내역
-        </PrimaryButton>
-      ),
+      cellRenderer: (params) =>
+        params.data[washKeys.company] === '웨스틴조선호텔' && (
+          <PrimaryButton
+            bordered
+            onClick={() => viewDetail(params.data[washKeys.id])}
+          >
+            차감 내역
+          </PrimaryButton>
+        ),
     },
   ];
 
