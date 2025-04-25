@@ -18,14 +18,13 @@ import { PrimaryButton } from '@/shared/layout-components/styles/button';
 import CategorySelectbox from '../report/CategorySelectbox';
 
 const Washing = () => {
-  const [searchState, setSearchState] = useState({
-    category1: '',
-    category2: '',
-    category3: '',
-    isCumulative: false,
-  });
+  // const searchType = [
+  //   { value: '1', label: '세탁 주문 번호' },
+  //   { value: '2', label: '품목명' },
+  //   { value: '3', label: '품목 번호' },
+  // ];
 
-  const initData = [
+  const [data, setData] = useState([
     {
       [washKeys.id]: '1',
       [washKeys.category1]: '침구',
@@ -81,79 +80,19 @@ const Washing = () => {
       [washKeys.onWashingQuantity]: 229,
       [washKeys.finishQuantity]: 2000,
     },
-  ];
-
-  const [data, setData] = useState(initData);
-
-  const handleSearch = () => {
-    let filteredData = [...initData];
-
-    // 카테고리1 필터링
-    if (searchState.category1 && searchState.category1 !== '') {
-      filteredData = filteredData.filter(
-        (item) => item[washKeys.category1] === searchState.category1,
-      );
-    }
-
-    // 카테고리2 필터링
-    if (searchState.category2 && searchState.category2 !== '') {
-      filteredData = filteredData.filter(
-        (item) => item[washKeys.category2] === searchState.category2,
-      );
-    }
-
-    // 카테고리3 필터링
-    if (searchState.category3 && searchState.category3 !== '') {
-      filteredData = filteredData.filter(
-        (item) => item[washKeys.category3] === searchState.category3,
-      );
-    }
-
-    // 누적 체크 시 수량 합산
-    if (searchState.isCumulative) {
-      filteredData = filteredData.map((item) => ({
-        ...item,
-        [washKeys.waitQuantity]:
-          item[washKeys.waitQuantity] + item[washKeys.finishQuantity],
-        [washKeys.onWashingQuantity]:
-          item[washKeys.onWashingQuantity] + item[washKeys.finishQuantity],
-      }));
-    }
-
-    setData(filteredData);
-  };
-
-  const handleCategoryChange = (category, value) => {
-    setSearchState({
-      ...searchState,
-      [category]: value,
-    });
-  };
+  ]);
 
   return (
     <Card overflow="visible">
       <GrayCard>
-        <CategorySelectbox
-          input
-          onChange={(category, value) => handleCategoryChange(category, value)}
-        />
+        <CategorySelectbox input />
         <Height height="1rem" />
         <Flex>
-          <Checkbox
-            name="cumulative"
-            id="cumulative"
-            label="누적"
-            checked={searchState.isCumulative}
-            onChange={(e) =>
-              setSearchState({ ...searchState, isCumulative: e.target.checked })
-            }
-          />
+          <Checkbox name="cumulative" id="cumulative" label="누적" />
           <div className="text-secondary ms-4 mb-1">
             누적 체크 시 회수 완료된 수량까지 합산되어 조회됩니다.
           </div>
-          <PrimaryButton className={'ms-auto'} onClick={handleSearch}>
-            검색
-          </PrimaryButton>
+          <PrimaryButton className={'ms-auto'}>검색</PrimaryButton>
         </Flex>
       </GrayCard>
       <Height height="1rem" />

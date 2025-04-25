@@ -15,19 +15,19 @@ const AnnouncementInfo = ({ data }) => {
         <Width width="7rem">
           <BoldText>제목</BoldText>
         </Width>
-        <div className="form-control"></div>
+        <div className="form-control">{data.title}</div>
       </Flex>
       <Flex height="2rem" gap="1rem">
         <Width width="7rem">
           <BoldText>등록일자</BoldText>
         </Width>
-        <div className="form-control"></div>
+        <div className="form-control">{data.createdAt}</div>
       </Flex>
       <Flex gap="1rem">
         <Width width="7rem">
           <BoldText>내용</BoldText>
         </Width>
-        <div className="form-control"></div>
+        <div style={{ whiteSpace: 'pre-line' }}>{data.content}</div>
       </Flex>
       <Flex
         minHeight="2rem"
@@ -38,6 +38,7 @@ const AnnouncementInfo = ({ data }) => {
         <Width width="7rem">
           <BoldText>첨부파일</BoldText>
         </Width>
+        <div>{data.attachedFile}</div>
       </Flex>
 
       <Height height="1.5rem" />

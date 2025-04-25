@@ -221,21 +221,6 @@ const Sidebar = () => {
                 className="main-logo desktop-logo"
                 alt="logo"
               />
-              {/* <img
-                src={`${process.env.NODE_ENV === 'production' ? basePath : ''}/assets/img/brand/logo-white.png`}
-                className="main-logo  desktop-dark"
-                alt="logo"
-              />
-              <img
-                src={`${process.env.NODE_ENV === 'production' ? basePath : ''}/assets/img/brand/favicon.png`}
-                className="main-logo  mobile-logo"
-                alt="logo"
-              />
-              <img
-                src={`${process.env.NODE_ENV === 'production' ? basePath : ''}/assets/img/brand/favicon-white.png`}
-                className="main-logo  mobile-dark"
-                alt="logo"
-              /> */}
             </Link>
           </div>
           <div className="main-sidemenu">
