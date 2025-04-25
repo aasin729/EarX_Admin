@@ -1,7 +1,6 @@
-import { basePath } from '@/next.config';
 import { AiOutlineFileDone } from 'react-icons/ai';
 
-const path = `${process.env.NODE_ENV === 'production' ? basePath : ''}/assets/img/svgicons/sidebar`;
+const path = `/assets/img/svgicons/sidebar`;
 
 export const MENUITEMS = [
   {

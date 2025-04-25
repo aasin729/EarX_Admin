@@ -1,17 +1,16 @@
-import Head from 'next/head';
-import { Inter } from 'next/font/google';
-import favicon from '../public/assets/img/brand/favicon.png';
-import styles from '@/styles/Home.module.scss';
-import { Alert, Button, Col, Form, Row, Tab, Tabs } from 'react-bootstrap';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import Seo from '@/shared/layout-components/seo/seo';
-import { auth } from '../shared/firebase/firebase';
-import { useDispatch } from 'react-redux';
 import { LOGIN_USER } from '@/shared/redux/actions/action';
+import Head from 'next/head';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+import favicon from '../public/assets/img/brand/favicon.png';
 
 export default function Home() {
+  const { basePath } = useRouter();
+
   useEffect(() => {
     if (document.body) {
       document
@@ -103,7 +102,7 @@ export default function Home() {
                     <div className="wd-100p">
                       <div className="d-flex mb-2">
                         <img
-                          src={`${process.env.NODE_ENV === 'production' ? basePath : ''}/assets/img/brand/logo.svg`}
+                          src={`${basePath}/assets/img/brand/logo.svg`}
                           className="sign-favicon"
                           alt="logo"
                         />

@@ -1,8 +1,8 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { MENUITEMS } from './nav';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { Fragment, useEffect, useState } from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { MENUITEMS } from './nav';
 let history = [];
 
 const Sidebar = () => {
@@ -217,7 +217,7 @@ const Sidebar = () => {
           <div className="main-sidebar-header active">
             <Link className="header-logo active" href={`/dashboard`}>
               <img
-                src={`${process.env.NODE_ENV === 'production' ? basePath : ''}/assets/img/brand/logo.svg`}
+                src={`${basePath}/assets/img/brand/logo.svg`}
                 className="main-logo desktop-logo"
                 alt="logo"
               />
