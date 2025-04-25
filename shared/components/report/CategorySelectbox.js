@@ -6,7 +6,7 @@ const { BoldText } = require('@/shared/layout-components/styles/text');
 const { default: SelectBox } = require('../SelectBox');
 const { InputWrapper } = require('@/shared/layout-components/styles/input');
 
-const CategorySelectbox = ({ input }) => {
+const CategorySelectbox = ({ input, onCategoryChange, onProductSearch }) => {
   const [category2Options, setCategory2Options] = useState([]);
   const [category3Options, setCategory3Options] = useState([]);
   const [selectedCategory1, setSelectedCategory1] = useState('');
@@ -81,11 +81,17 @@ const CategorySelectbox = ({ input }) => {
     setCategory2Options(category2Data[selected] || []);
     setCategory3Options([]);
     setSelectedCategory2('');
+    onCategoryChange('category1', selected);
   };
 
   const handleCategory2Change = (selected) => {
     setSelectedCategory2(selected);
     setCategory3Options(category3Data[selected] || []);
+    onCategoryChange('category2', selected);
+  };
+
+  const handleCategory3Change = (e) => {
+    onCategoryChange('category3', e.value);
   };
 
   return (
@@ -114,12 +120,14 @@ const CategorySelectbox = ({ input }) => {
         placeholder="소분류"
         name="category3"
         options={category3Options}
+        onChange={handleCategory3Change}
       />
       {input && (
         <InputWrapper
           className="flex-1"
           name="productName"
           placeholder="품목명 혹은 품목번호를 입력하세요"
+          onChange={onProductSearch}
         />
       )}
     </Flex>
