@@ -34,13 +34,13 @@ export default function Home() {
   }, []);
 
   const [err, setError] = useState('');
-  
+
   const handleEnter = (event) => {
     if (event.key === 'Enter') {
       ReactLogin();
     }
   };
-  
+
   const [data, setData] = useState({
     email: '',
     password: '',
@@ -53,7 +53,7 @@ export default function Home() {
     setData({ ...data, [e.target.name]: e.target.value });
     setError('');
   };
-  
+
   const routeChange = (first) => {
     let path = first ? '/change-password' : `/dashboard`;
     navigate.push(path);
@@ -125,7 +125,7 @@ export default function Home() {
                     <div className="wd-100p">
                       <div className="d-flex mb-2">
                         <img
-                          src={`${process.env.NODE_ENV === 'production' ? basePath : ''}/assets/img/brand/logo.svg`}
+                          src={`${basePath}/assets/img/brand/logo.svg`}
                           className="sign-favicon"
                           alt="logo"
                         />
