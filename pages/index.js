@@ -99,9 +99,9 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Lucicare</title>
+        <title>EarX</title>
         <meta name="description" content="Spruha" />
-        <link rel="icon" href={favicon.src} />
+        {/* <link rel="icon" href={favicon.src} /> */}
       </Head>
       <Seo title={'Login'} />
       {loading && <ScreenLoader />}

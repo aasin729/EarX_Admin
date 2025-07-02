@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import usersMockData from '@/shared/components/users/usersMockData';
 import React from 'react';
+import { deviceMockData } from '@/shared/components/device/Device';
 
 const fieldLabels = {
   id: 'ID',
@@ -58,8 +59,11 @@ const allFields = Object.keys(fieldLabels);
 
 const UserDetail = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { id, from } = router.query;
   const user = usersMockData.find(u => u.id === Number(id));
+
+  // 해당 유저의 디바이스 정보만 추출
+  const userDevices = deviceMockData.filter(d => d.user_id === Number(id));
 
   if (!user) return <div>사용자를 찾을 수 없습니다.</div>;
 
@@ -88,8 +92,42 @@ const UserDetail = () => {
         </tbody>
       </table>
       <div style={{ marginTop: 32, textAlign: 'right' }}>
-        <button onClick={() => router.push('/users')}>목록</button>
+        <button onClick={() => router.push(from === 'device' ? '/device' : '/users')}>목록</button>
       </div>
+      {/* from이 device일 때만 디바이스 정보 표 렌더링 */}
+      {from === 'device' && userDevices.length > 0 && (
+        <div style={{ marginTop: 40 }}>
+          <h3>디바이스 정보</h3>
+          <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 12 }}>
+            <thead>
+              <tr>
+                <th style={{ border: '1px solid #ddd', padding: 8 }}>ID</th>
+                <th style={{ border: '1px solid #ddd', padding: 8 }}>Windows</th>
+                <th style={{ border: '1px solid #ddd', padding: 8 }}>Android</th>
+                <th style={{ border: '1px solid #ddd', padding: 8 }}>Web</th>
+                <th style={{ border: '1px solid #ddd', padding: 8 }}>iOS</th>
+                <th style={{ border: '1px solid #ddd', padding: 8 }}>macOS</th>
+                <th style={{ border: '1px solid #ddd', padding: 8 }}>생성 일시</th>
+                <th style={{ border: '1px solid #ddd', padding: 8 }}>업데이트 일시</th>
+              </tr>
+            </thead>
+            <tbody>
+              {userDevices.map(device => (
+                <tr key={device.id}>
+                  <td style={{ border: '1px solid #ddd', padding: 8 }}>{device.id}</td>
+                  <td style={{ border: '1px solid #ddd', padding: 8 }}>{device.windows || '-'}</td>
+                  <td style={{ border: '1px solid #ddd', padding: 8 }}>{device.android || '-'}</td>
+                  <td style={{ border: '1px solid #ddd', padding: 8 }}>{device.web || '-'}</td>
+                  <td style={{ border: '1px solid #ddd', padding: 8 }}>{device.ios || '-'}</td>
+                  <td style={{ border: '1px solid #ddd', padding: 8 }}>{device.macos || '-'}</td>
+                  <td style={{ border: '1px solid #ddd', padding: 8 }}>{device.created_at || '-'}</td>
+                  <td style={{ border: '1px solid #ddd', padding: 8 }}>{device.updated_at || '-'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };

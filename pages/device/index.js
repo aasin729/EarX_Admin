@@ -1,4 +1,4 @@
-import Calculation from '@/shared/components/calc/Calculation';
+import Device from '@/shared/components/device/Device';
 import Container from '@/shared/layout-components/spaces/Container';
 import ContentWrapper from '@/shared/layout-components/spaces/ContentWrapper';
 
@@ -7,7 +7,7 @@ const CalcManagement = () => {
     <Container>
       <h1 className="fw-bold">디바이스</h1>
       <ContentWrapper>
-        {/* <Calculation /> */}
+        <Device />
       </ContentWrapper>
     </Container>
   );

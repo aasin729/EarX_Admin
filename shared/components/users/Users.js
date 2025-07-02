@@ -205,6 +205,10 @@ const Users = () => {
           ))}
         </select>
       </div>
+      {/* 합계 표시 */}
+      <div style={{ marginBottom: '0.5rem', fontWeight: 'bold', fontSize: '1rem' }}>
+        합계 : {filteredData.length}명
+      </div>
       <GridComponent
         data={pagedData}
         setData={() => {}}

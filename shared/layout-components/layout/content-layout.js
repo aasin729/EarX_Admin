@@ -52,9 +52,9 @@ const Contentlayout = ({ children }) => {
   return (
     <>
       <Head>
-        <title>Lucicare - 세탁관리자</title>
+        <title>EarX - Admin</title>
         <meta name="description" content="Spruha" />
-        <link rel="icon" href={favicon.src} />
+        {/* <link rel="icon" href={favicon.src} /> */}
       </Head>
       <Provider store={store}>
         <div className="horizontalMenucontainer">

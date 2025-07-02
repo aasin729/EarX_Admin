@@ -3,7 +3,7 @@ import Head from 'next/head';
 import favicon from '../../../public/assets/img/brand/favicon.png';
 
 const Seo = ({ title }) => {
-  let i = `Lucicare - 세탁관리자 - ${title}`;
+  let i = `EarX - Admin - ${title}`;
   return (
     <Head>
       <title>{i}</title>
@@ -11,7 +11,7 @@ const Seo = ({ title }) => {
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap"
         rel="stylesheet"
       ></link>
-      <meta name="description" content="Lucicare - 세탁업체" />
+      <meta name="description" content="EarX - Admin" />
       <meta name="author" content="Spruko Technologies Private Limited" />
       <meta
         name="keywords"
@@ -31,7 +31,7 @@ react admin dashboard template
 dashboard template react bootstrap
 admin and dashboard template"
       ></meta>
-      <link rel="icon" href={favicon.src} />
+      {/* <link rel="icon" href={favicon.src} /> */}
     </Head>
   );
 };
