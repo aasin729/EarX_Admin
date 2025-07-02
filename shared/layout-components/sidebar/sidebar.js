@@ -216,11 +216,12 @@ const Sidebar = () => {
         >
           <div className="main-sidebar-header active">
             <Link className="header-logo active" href={`/dashboard`}>
-              <img
+              <h1>EarX</h1>
+              {/* <img
                 src={`${basePath}/assets/img/brand/logo.svg`}
                 className="main-logo desktop-logo"
                 alt="logo"
-              />
+              /> */}
             </Link>
           </div>
           <div className="main-sidemenu">
@@ -241,7 +242,7 @@ const Sidebar = () => {
                 <Fragment key={itemi + Math.random() * 100}>
                   <li className="side-item side-item-category">
                     {/* {Item.menutitle} */}
-                    세탁 관리자
+                    EarX 관리자
                   </li>
                   {Item.Items.map((menuItem, i) => (
                     <li

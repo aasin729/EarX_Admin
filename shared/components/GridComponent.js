@@ -37,6 +37,8 @@ const GridComponent = ({
   searchText,
   listLength,
   onChangePerPage,
+  onClearSelection,
+  showCheckboxes = true,
 }) => {
   //테이블 ref
   const gridApiRef = useRef(null);
@@ -45,10 +47,10 @@ const GridComponent = ({
   const rowSelection = useMemo(() => {
     return {
       mode: 'multiRow',
-      checkboxes: true,
-      headerCheckbox: true,
+      checkboxes: showCheckboxes,
+      headerCheckbox: showCheckboxes,
     };
-  }, []);
+  }, [showCheckboxes]);
 
   //가로 스크롤이 생기면서 컬럼이 잘리는 현상을 해결하기 위한 함수
   const onGridSizeChanged = useCallback(
@@ -116,6 +118,8 @@ const GridComponent = ({
 
   //체크박스 선택 시 이벤트
   const handleButtonClick = () => {
+    // clearSelection이 true일 때는 선택 이벤트 무시
+    if (clearSelection) return;
     const selectedNodes = gridApiRef.current.getSelectedNodes();
     const selectedData = selectedNodes.map((node) => node.data);
     setSelectionArray(selectedData);
@@ -125,6 +129,9 @@ const GridComponent = ({
   const handleDeselectAll = () => {
     if (gridApiRef.current) {
       gridApiRef.current.deselectAll();
+      if (typeof onClearSelection === 'function') {
+        onClearSelection();
+      }
     }
   };
   useEffect(() => {
@@ -174,6 +181,18 @@ const GridComponent = ({
     }
   }, [currentPage, pageSize, searchText, sortField, sortOrder]);
 
+  const processedColumns = useMemo(() => {
+    if (!columns || columns.length === 0) return columns;
+    return [
+      {
+        ...columns[0],
+        checkboxSelection: showCheckboxes,
+        headerCheckboxSelection: showCheckboxes,
+      },
+      ...columns.slice(1),
+    ];
+  }, [columns, showCheckboxes]);
+
   return (
     <div className="w-100">
       <div className="d-flex">
@@ -182,8 +201,11 @@ const GridComponent = ({
             <SelectBox
               options={paginationPageSizeSelector}
               defaultValue={paginationPageSizeSelector[0]}
-              onChange={(option) => setPageSize(option.value)}
-              isDisabled={onChangePerPage}
+              onChange={(option) => {
+                setPageSize(option.value);
+                if (onChangePerPage) onChangePerPage(option.value);
+              }}
+              isDisabled={!onChangePerPage}
             />
           </Width>
         )}
@@ -195,7 +217,7 @@ const GridComponent = ({
           <AgGridReact
             // ref={gridRef}
             rowData={data}
-            columnDefs={columns}
+            columnDefs={processedColumns}
             paginationPageSize={pageSize}
             pagination={!noPagination}
             suppressPaginationPanel={true}
@@ -206,14 +228,15 @@ const GridComponent = ({
                 ? (e) => onRowClicked(e.data)
                 : undefined
             }
-            onRowSelected={handleButtonClick}
+            onSelectionChanged={handleButtonClick}
             rowClass={onRowClicked ? 'pointer' : ''}
             domLayout={height ?? 'autoHeight'}
             onCellValueChanged={onCellValueChanged ?? undefined}
             noRowsOverlayComponent={() => <div>데이터가 없습니다.</div>}
             enableCellSpan={enableCellSpan}
-            rowSelection={selection ? rowSelection : undefined}
+            rowSelection={selection ? 'multiple' : undefined}
             onSortChanged={onSortChanged}
+            getRowId={params => params.data.id}
           />
         </div>
       </div>

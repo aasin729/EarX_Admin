@@ -5,9 +5,9 @@ import ContentWrapper from '@/shared/layout-components/spaces/ContentWrapper';
 const CalcManagement = () => {
   return (
     <Container>
-      <h1 className="fw-bold">정산 관리</h1>
+      <h1 className="fw-bold">디바이스</h1>
       <ContentWrapper>
-        <Calculation />
+        {/* <Calculation /> */}
       </ContentWrapper>
     </Container>
   );

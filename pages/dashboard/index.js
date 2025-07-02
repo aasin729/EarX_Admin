@@ -1,110 +1,66 @@
-import AnnouncementComponent from '@/shared/components/dashboard/AnnouncementComponent';
-import CurrentReturn from '@/shared/components/dashboard/CurrentReturn';
-import CurrentWashing from '@/shared/components/dashboard/CurrentWashing';
-import { announcementKeys } from '@/shared/functions/keys';
+import StatCards from '@/shared/components/dashboard/StatCards';
+import RecentActivity from '@/shared/components/dashboard/RecentActivity';
+import Announcements from '@/shared/components/dashboard/Announcements';
+import Alerts from '@/shared/components/dashboard/Alerts';
+import Charts from '@/shared/components/dashboard/Charts';
 import Container from '@/shared/layout-components/spaces/Container';
 import ContentWrapper from '@/shared/layout-components/spaces/ContentWrapper';
-import { Flex } from '@/shared/layout-components/spaces/Flex';
-import { RadioInput } from '@/shared/layout-components/styles/input';
-import Link from 'next/link';
-import { useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
-import { FiChevronsRight } from 'react-icons/fi';
+import { Row, Col } from 'react-bootstrap';
+
+const mockData = {
+  stats: {
+    admins: 3,
+    users: 1200,
+    devices: 800,
+    runs: 5000,
+  },
+  recentUsers: [
+    { id: 1, name: '홍길동', email: 'hong@test.com', createdAt: '2024-05-01' },
+    { id: 2, name: '김철수', email: 'kim@test.com', createdAt: '2024-05-02' },
+  ],
+  recentDevices: [
+    { id: 1, type: '워치', address: '00:11:22:33:44:55', createdAt: '2024-05-01' },
+    { id: 2, type: '밴드', address: '66:77:88:99:AA:BB', createdAt: '2024-05-02' },
+  ],
+  recentRuns: [
+    { id: 1, user: '홍길동', distance: 5.2, finishedAt: '2024-05-01 07:30' },
+    { id: 2, user: '김철수', distance: 10.1, finishedAt: '2024-05-02 06:50' },
+  ],
+  announcements: [
+    { id: 1, title: '2024년 5월 시스템 점검 안내', createdAt: '2024-05-01' },
+    { id: 2, title: '신규 기능 업데이트 안내', createdAt: '2024-04-28' },
+  ],
+  alerts: [
+    { id: 1, message: '3명의 사용자가 삭제됨', date: '2024-05-01' },
+    { id: 2, message: '1개의 디바이스가 등록됨', date: '2024-05-02' },
+  ],
+  chartData: {
+    users: [1000, 1100, 1150, 1200],
+    devices: [700, 750, 780, 800],
+    runs: [4000, 4500, 4800, 5000],
+    labels: ['2주전', '1주전', '이번주', '현재'],
+  },
+};
 
 const Dashboard = () => {
-  const [dashboardData, setDashboardData] = useState({
-    announcement: [
-      {
-        [announcementKeys.id]: 1,
-        [announcementKeys.title]:
-          '2024년 4월 세탁물 수거 일정 변경 안내 (공휴일 조정)',
-        [announcementKeys.createdAt]: '2024-04-23',
-      },
-      {
-        [announcementKeys.id]: 2,
-        [announcementKeys.title]: '새로운 세탁물 분류 시스템 도입 및 교육 안내',
-        [announcementKeys.createdAt]: '2024-04-15',
-      },
-      {
-        [announcementKeys.id]: 3,
-        [announcementKeys.title]: '세탁물 배송 지연 관련 사과 및 보상 안내',
-        [announcementKeys.createdAt]: '2024-04-10',
-      },
-    ],
-    currentOrder: {
-      washing: {
-        waiting: 1,
-        onGoing: 1,
-        completed: 1,
-      },
-      return: {
-        complated: 1,
-        uncompleted: 1,
-      },
-    },
-  });
-  const [periodState, setPeriodState] = useState('1');
-  const handlePeriod = (e) => {
-    setPeriodState(e.target.value);
-  };
   return (
     <Container>
       <ContentWrapper>
-        <Row>
-          <Col xs={6}>
-            <Flex margin="0 0 0.5rem 0">
-              <h2 className="fw-bold mb-3">공지사항</h2>
-              <Link href="/announcement" className="ms-auto text-primary">
-                전체 보기 <FiChevronsRight />
-              </Link>
-            </Flex>
-            <AnnouncementComponent data={dashboardData.announcement} />
+        <h1 className="fw-bold">대시보드</h1>
+        <StatCards stats={mockData.stats} />
+        <Row className="mt-4" style={{ minHeight: '600px' }}>
+          <Col md={8} style={{ display: 'flex', flexDirection: 'column', gap: '16px', height: '100%' }}>
+            <div style={{ flex: 1 }}>
+              <RecentActivity users={mockData.recentUsers} devices={mockData.recentDevices} runs={mockData.recentRuns} />
+            </div>
           </Col>
-          <Col xs="6">
-            <Flex
-              direction="column"
-              width="100%"
-              height="100%"
-              align="flex-start"
-            >
-              <Flex width="100%" margin="0 0 0.5rem 0">
-                <h2 className="fw-bold mb-3">나의 세탁 현황 </h2>
-                <Flex margin="0 2rem 0 auto" className="ms-auto" gap="1rem">
-                  <RadioInput
-                    value="1"
-                    onChange={handlePeriod}
-                    label="최근 1주"
-                    name="period"
-                    id="recent1week"
-                    defaultChecked={periodState === '1'}
-                  />
-                  <RadioInput
-                    value="2"
-                    onChange={handlePeriod}
-                    label="최근 2주"
-                    name="period"
-                    id="recent2week"
-                    defaultChecked={periodState === '2'}
-                  />
-                  <RadioInput
-                    value="4"
-                    onChange={handlePeriod}
-                    label="최근 4주"
-                    name="period"
-                    id="recent4week"
-                    defaultChecked={periodState === '4'}
-                  />
-                </Flex>
-              </Flex>
-              <Row className="w-100 flex-1">
-                <Col xs="6">
-                  <CurrentWashing data={dashboardData.currentOrder.washing} />
-                </Col>
-                <Col xs="6">
-                  <CurrentReturn data={dashboardData.currentOrder.return} />
-                </Col>
-              </Row>
-            </Flex>
+          <Col md={4} style={{ display: 'flex', flexDirection: 'column', gap: '16px', height: '100%' }}>
+            <div style={{ flex: 1, minHeight: 0 }}>
+              <Alerts data={mockData.alerts} />
+            </div>
+            <div style={{ flex: 1, minHeight: 0 }}>
+              <Charts data={mockData.chartData} />
+            </div>
           </Col>
         </Row>
       </ContentWrapper>

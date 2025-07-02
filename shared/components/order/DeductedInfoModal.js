@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { washKeys } from '@/shared/functions/keys';
 import GridComponent from '../GridComponent';
 import Modal from '../Modal';
 
 const DeducredInfoModal = ({ order, show, onHide, data }) => {
+  const [clearSelection, setClearSelection] = useState(false);
   const columns = [
     {
       field: washKeys.productName,
@@ -27,7 +29,14 @@ const DeducredInfoModal = ({ order, show, onHide, data }) => {
   ];
   return (
     <Modal title={'차감 내역 조회'} show={show} onHide={onHide} size={'lg'}>
-      <GridComponent data={data} noPagination fitRowWidth columns={columns} />
+      <GridComponent
+        data={data}
+        noPagination
+        fitRowWidth
+        columns={columns}
+        clearSelection={clearSelection}
+        onClearSelection={() => setClearSelection(false)}
+      />
     </Modal>
   );
 };

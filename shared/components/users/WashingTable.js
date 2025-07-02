@@ -1,8 +1,11 @@
 import { washKeys } from '@/shared/functions/keys';
 import { useRouter } from 'next/router';
 import GridComponent from '../GridComponent';
+import { useState } from 'react';
 
 const WashingTable = ({ data, setData }) => {
+  const [clearSelection, setClearSelection] = useState(false);
+
   const columns = [
     {
       field: washKeys.category1,
@@ -70,6 +73,8 @@ const WashingTable = ({ data, setData }) => {
         columns={columns}
         onRowClicked={viewWashingDetail}
         fitRowWidth
+        clearSelection={clearSelection}
+        onClearSelection={() => setClearSelection(false)}
       />
     </>
   );

@@ -24,13 +24,15 @@ export default function Home() {
 
   useEffect(() => {
     if (document.body) {
+      document.body.style.backgroundColor = '#000';
       document
         .querySelector('body')
-        .classList.add('ltr', 'error-page1', 'bg-primary');
+        .classList.add('ltr', 'error-page1');
     }
 
     return () => {
-      document.body.classList.remove('ltr', 'error-page1', 'bg-primary');
+      document.body.style.backgroundColor = '';
+      document.body.classList.remove('ltr', 'error-page1');
     };
   }, []);
 
@@ -56,7 +58,8 @@ export default function Home() {
   };
 
   const routeChange = (first) => {
-    let path = first ? '/change-password' : `/dashboard`;
+    // let path = first ? '/change-password' : `/dashboard`;
+    let path = `/dashboard`;
     navigate.push(path);
   };
 
@@ -102,11 +105,11 @@ export default function Home() {
       </Head>
       <Seo title={'Login'} />
       {loading && <ScreenLoader />}
-      <div className="square-box">
+      {/* <div className="square-box">
         <div></div> <div></div> <div></div> <div></div> <div></div> <div></div>
         <div></div> <div></div> <div></div> <div></div> <div></div> <div></div>
         <div></div> <div></div> <div></div>
-      </div>
+      </div> */}
 
       <div className="page">
         <div className="page-single">
@@ -124,17 +127,17 @@ export default function Home() {
                   {/* <!-- Demo content--> */}
                   <div className="main-card-signin d-md-flex">
                     <div className="wd-100p">
-                      <div className="d-flex mb-2">
+                      {/* <div className="d-flex mb-2">
                         <img
                           src={`${basePath}/assets/img/brand/logo.svg`}
                           className="sign-favicon"
                           alt="logo"
                         />
-                      </div>
+                      </div> */}
                       <div className="">
                         <div className="main-signup-header">
                           <div className="fs-3 fw-bold">
-                            RFID 물류관리 시스템
+                            EarX 관리자 페이지
                           </div>
                           <h6 className="font-weight-semibold mb-4">
                             관리자 계정에 로그인하세요.
@@ -172,7 +175,7 @@ export default function Home() {
                                   <Button
                                     onClick={ReactLogin}
                                     variant=""
-                                    className="btn btn-primary btn-block"
+                                    className="btn btn-primary btn-block custom-dark-btn"
                                   >
                                     Sign In
                                   </Button>
@@ -185,13 +188,13 @@ export default function Home() {
                             </div>
                           </div>
 
-                          <div className="main-signin-footer text-center mt-3">
+                          {/* <div className="main-signin-footer text-center mt-3">
                             <p>
                               <Link href="" className="mb-3">
                                 비밀번호를 잊으셨나요?
                               </Link>
                             </p>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>

@@ -4,8 +4,11 @@ import { announcementKeys } from '@/shared/functions/keys';
 import { DefaultButton } from '@/shared/layout-components/styles/button';
 import { FaRegFile } from 'react-icons/fa6';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 const AnnouncementTable = ({ data, setData }) => {
+  const [clearSelection, setClearSelection] = useState(false);
+
   const columns = [
     {
       field: announcementKeys.id,
@@ -57,6 +60,8 @@ const AnnouncementTable = ({ data, setData }) => {
           columns={columns}
           fitRowWidth
           onRowClicked
+          clearSelection={clearSelection}
+          onClearSelection={() => setClearSelection(false)}
         />
       </Card>
     </>

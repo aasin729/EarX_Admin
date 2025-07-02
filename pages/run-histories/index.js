@@ -40,9 +40,9 @@ const Announcement = () => {
   ]);
   return (
     <Container>
-      <h1 className="fw-bold">공지사항</h1>
+      <h1 className="fw-bold">히스토리</h1>
       <ContentWrapper>
-        <AnnouncementTable data={data} setData={setData} />
+        {/* <AnnouncementTable data={data} setData={setData} /> */}
       </ContentWrapper>
     </Container>
   );

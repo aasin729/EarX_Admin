@@ -1,17 +1,17 @@
-import Washing from '@/shared/components/washing/Washing';
+import Users from '@/shared/components/users/Users';
 import Container from '@/shared/layout-components/spaces/Container';
 import ContentWrapper from '@/shared/layout-components/spaces/ContentWrapper';
 
-const WashingManagement = () => {
+const UsersPage = () => {
   return (
     <Container>
-      <h1 className="fw-bold">세탁 관리</h1>
+      <h1 className="fw-bold">사용자</h1>
       <ContentWrapper>
-        <Washing />
+        <Users />
       </ContentWrapper>
     </Container>
   );
 };
 
-WashingManagement.layout = 'Contentlayout';
-export default WashingManagement;
+UsersPage.layout = 'Contentlayout';
+export default UsersPage;
