@@ -127,7 +127,7 @@ const Device = () => {
       <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
         <input
           name="serial"
-          placeholder="시리얼번호 검색 (예: F8:EE:DD:CC:BB:AA)"
+          placeholder="Mac Addr 검색 (예:F8:EE:DD:CC:BB:AA)"
           value={serialFilter}
           onChange={handleSerialFilterChange}
           style={{ width: 300, height: 40 }}

@@ -196,6 +196,7 @@ const GridComponent = ({
   return (
     <div className="w-100">
       <div className="d-flex">
+      {/* <div className="d-flex" style={{ justifyContent: 'flex-end' }}> */}
         {!noPagination && (
           <Width width="10rem">
             <SelectBox

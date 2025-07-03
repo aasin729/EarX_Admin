@@ -7,16 +7,24 @@ let history = [];
 
 const Sidebar = () => {
   let location = useRouter();
-  let { basePath } = useRouter();
+  let { basePath, query } = useRouter();
   const [menuitems, setMenuitems] = useState(MENUITEMS);
   // initial loading
   useEffect(() => {
-    history.push(location.pathname); // add  history to history  stack for current location.pathname to prevent multiple history calls innerWidth  and innerWidth  calls from  multiple users. This is important because the history stack is not always empty when the user clicks  the history
+    // --- PATCH: force device menu active when from=device on user detail ---
+    let effectivePath = location.pathname;
+    if (
+      effectivePath.startsWith('/users/detail/') &&
+      query && query.from === 'device'
+    ) {
+      effectivePath = '/device';
+    }
+    history.push(effectivePath);
     if (history.length > 2) {
       history.shift();
     }
     if (history[0] !== history[1]) {
-      setSidemenu();
+      setSidemenu(effectivePath);
     }
     let mainContent = document.querySelector('.main-content');
 
@@ -25,7 +33,7 @@ const Sidebar = () => {
     return () => {
       mainContent.removeEventListener('click', mainContentClickFn);
     };
-  }, [location]);
+  }, [location, query]);
 
   // location
   useEffect(() => {
@@ -47,7 +55,7 @@ const Sidebar = () => {
     }
   }
   //<-------End---->
-  function setSidemenu() {
+  function setSidemenu(effectivePath) {
     if (menuitems) {
       menuitems.filter((mainlevel) => {
         if (mainlevel.Items) {
@@ -55,12 +63,12 @@ const Sidebar = () => {
             items.active = false;
             items.selected = false;
             if (
-              location.pathname === '/nowa/preview/' ||
-              location.pathname === '/nowa/preview/'
+              effectivePath === '/nowa/preview/' ||
+              effectivePath === '/nowa/preview/'
             ) {
-              location.pathname = '/nowa/preview/dashboard/dashboard-1/';
+              effectivePath = '/nowa/preview/dashboard/dashboard-1/';
             }
-            if (location.pathname.includes(items.path)) {
+            if (effectivePath.includes(items.path)) {
               items.active = true;
               items.selected = true;
             }
@@ -68,7 +76,7 @@ const Sidebar = () => {
               items.children.filter((submenu) => {
                 submenu.active = false;
                 submenu.selected = false;
-                if (location.pathname === submenu.path) {
+                if (effectivePath === submenu.path) {
                   items.active = true;
                   items.selected = true;
                   submenu.active = true;
@@ -78,7 +86,7 @@ const Sidebar = () => {
                   submenu.children.filter((submenu1) => {
                     submenu1.active = false;
                     submenu1.selected = false;
-                    if (location.pathname === submenu1.path) {
+                    if (effectivePath === submenu1.path) {
                       items.active = true;
                       items.selected = true;
                       submenu.active = true;

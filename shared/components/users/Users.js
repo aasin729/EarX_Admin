@@ -3,6 +3,8 @@ import { useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import GridComponent from '../GridComponent';
 import usersMockData from '@/shared/components/users/usersMockData';
+import { InputWrapper } from '@/shared/layout-components/styles/input';
+import SelectBox from '../SelectBox';
 
 const LOGIN_TYPE_OPTIONS = [
   { value: '', label: '로그인타입' },
@@ -170,40 +172,38 @@ const Users = () => {
       <style>{`.placeholder-option { color: #888 !important; }`}</style>
       {/* 필터 UI */}
       <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
-        <input
+        <InputWrapper
           name="name"
           placeholder="이름 검색"
           value={filter.name}
           onChange={handleFilterChange}
-          style={{ width: 120 }}
+          style={{ width: '110px' }}
         />
-        <input
+        <InputWrapper
           name="email"
           placeholder="이메일 검색"
           value={filter.email}
           onChange={handleFilterChange}
-          style={{ width: 180 }}
+          style={{ width: '180px' }}
         />
-        <select
+        <SelectBox
           name="login_type"
-          value={filter.login_type}
-          onChange={handleFilterChange}
-          style={{ width: 100 }}
-        >
-          {LOGIN_TYPE_OPTIONS.map((opt, idx) => (
-            <option key={opt.value} value={opt.value} className={idx === 0 ? 'placeholder-option' : ''}>{opt.label}</option>
-          ))}
-        </select>
-        <select
+          value={LOGIN_TYPE_OPTIONS.find(opt => String(opt.value) === String(filter.login_type))}
+          options={LOGIN_TYPE_OPTIONS}
+          onChange={opt => handleSelectChange('login_type', opt.value)}
+          placeholder="로그인타입"
+          styles={{ container: base => ({ ...base, width: 150 }) }}
+          isSearchable={false}
+        />
+        <SelectBox
           name="is_deleted"
-          value={filter.is_deleted}
-          onChange={handleFilterChange}
-          style={{ width: 100 }}
-        >
-          {DELETE_OPTIONS.map((opt, idx) => (
-            <option key={opt.value} value={opt.value} className={idx === 0 ? 'placeholder-option' : ''}>{opt.label}</option>
-          ))}
-        </select>
+          value={DELETE_OPTIONS.find(opt => String(opt.value) === String(filter.is_deleted))}
+          options={DELETE_OPTIONS}
+          onChange={opt => handleSelectChange('is_deleted', opt.value)}
+          placeholder="삭제여부"
+          styles={{ container: base => ({ ...base, width: 150 }) }}
+          isSearchable={false}
+        />
       </div>
       {/* 합계 표시 */}
       <div style={{ marginBottom: '0.5rem', fontWeight: 'bold', fontSize: '1rem' }}>

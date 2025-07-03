@@ -5,6 +5,7 @@ import { Flex } from '@/shared/layout-components/spaces/Flex';
 import GridComponent from '../GridComponent';
 import { useState, useEffect } from 'react';
 import Modal from '../Modal';
+import { PrimaryButton, SecondaryButton } from '@/shared/layout-components/styles/button';
 
 const initialAdmins = [
   {
@@ -202,20 +203,36 @@ const AdminList = () => {
     <Card overflow="visible">
       <Flex gap="1rem" style={{ marginBottom: '1rem', justifyContent: 'flex-end', alignItems: 'center' }}>
         <div>
-          <button
-            style={{ marginRight: '0.5rem', padding: '15px', fontSize : 14 }}
-            disabled={selectedAdmins.length === 0}
-            onClick={openPasswordModal}
-          >
-            비밀번호 변경
-          </button>
-          <button
-           style={{ padding: '15px', fontSize : 14 }}
-            disabled={selectedAdmins.length === 0}
-            onClick={handleDeleteRestore}
-          >
-            삭제/복구
-          </button>
+          {selectedAdmins.length === 0 ? (
+            <SecondaryButton
+              style={{ marginRight: '0.5rem', fontSize: 14, padding: '10px 24px' }}
+              disabled
+            >
+              비밀번호 변경
+            </SecondaryButton>
+          ) : (
+            <PrimaryButton
+              style={{ marginRight: '0.5rem', fontSize: 14, padding: '10px 24px' }}
+              onClick={openPasswordModal}
+            >
+              비밀번호 변경
+            </PrimaryButton>
+          )}
+          {selectedAdmins.length === 0 ? (
+            <SecondaryButton
+              style={{ fontSize: 14, padding: '10px 24px' }}
+              disabled
+            >
+              삭제/복구
+            </SecondaryButton>
+          ) : (
+            <SecondaryButton
+              style={{ fontSize: 14, padding: '10px 24px', background: '#ff4d4f', color: '#fff' }}
+              onClick={handleDeleteRestore}
+            >
+              삭제/복구
+            </SecondaryButton>
+          )}
         </div>
       </Flex>
       <Height height="1.75rem" />
@@ -248,10 +265,12 @@ const AdminList = () => {
             />
           </div>
           <div style={{ textAlign: 'right' }}>
-            <button type="button" onClick={closePasswordModal} style={{ marginRight: '0.5rem' }}>
+            <SecondaryButton type="button" onClick={closePasswordModal} style={{ marginRight: '0.5rem' }}>
               취소
-            </button>
-            <button type="submit">변경</button>
+            </SecondaryButton>
+            <PrimaryButton type="submit">
+              변경
+            </PrimaryButton>
           </div>
         </form>
       </Modal>

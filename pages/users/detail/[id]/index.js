@@ -133,3 +133,5 @@ const UserDetail = () => {
 };
 
 export default UserDetail;
+
+UserDetail.layout = 'Contentlayout';

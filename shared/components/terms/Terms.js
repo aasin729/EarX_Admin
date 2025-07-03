@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Card } from '@/shared/layout-components/spaces/SpacesComponenet';
+import Modal from '@/shared/components/Modal';
+import { PrimaryButton, SecondaryButton } from '@/shared/layout-components/styles/button';
 
 const initialTerms = [
   {
@@ -131,43 +133,6 @@ const Terms = () => {
     setPrivacyList(privacyList.filter(item => item.id !== id));
   };
 
-  // 모달 컴포넌트
-  const Modal = ({ visible, onClose, onConfirm, value, setValue, title, placeholder }) => {
-    if (!visible) return null;
-    return (
-      <div style={{
-        position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
-        background: 'rgba(0,0,0,0.3)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center'
-      }}>
-        <div style={{ background: '#fff', borderRadius: 12, padding: 40, minWidth: 500, maxWidth: 800, width: '90vw', boxShadow: '0 4px 24px rgba(0,0,0,0.15)' }}>
-          <div style={{ fontWeight: 'bold', fontSize: 22, marginBottom: 24 }}>{title}</div>
-          <div style={{ marginBottom: 24 }}>
-            <textarea
-              value={value}
-              onChange={e => setValue(e.target.value)}
-              placeholder={placeholder}
-              style={{ width: '100%', minHeight: 200, fontSize: 15, padding: 12, borderRadius: 6, border: '1px solid #ddd', resize: 'vertical' }}
-            />
-          </div>
-          <div style={{ textAlign: 'right' }}>
-            <button
-              onClick={onClose}
-              style={{ marginRight: 12, background: '#eee', color: '#333', border: 'none', borderRadius: 4, padding: '10px 32px', fontWeight: 'bold', fontSize: 17, cursor: 'pointer' }}
-            >
-              취소
-            </button>
-            <button
-              onClick={onConfirm}
-              style={{ background: '#3366ff', color: '#fff', border: 'none', borderRadius: 4, padding: '10px 32px', fontWeight: 'bold', fontSize: 17, cursor: 'pointer' }}
-            >
-              추가
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div>
       {/* 탭 버튼 UI */}
@@ -196,34 +161,70 @@ const Terms = () => {
 
       {/* 모달 */}
       <Modal
-        visible={showTermsModal}
-        onClose={() => { setShowTermsModal(false); setNewTerms(''); }}
-        onConfirm={handleAddTerms}
-        value={newTerms}
-        setValue={setNewTerms}
+        show={showTermsModal}
+        onHide={() => { setShowTermsModal(false); setNewTerms(''); }}
         title="이용약관 추가"
-        placeholder="새 이용약관 내용을 입력하세요"
-      />
+      >
+        <div style={{ marginBottom: 24 }}>
+          <textarea
+            value={newTerms}
+            onChange={e => setNewTerms(e.target.value)}
+            placeholder="새 이용약관 내용을 입력하세요"
+            style={{ width: '100%', minHeight: 200, fontSize: 15, padding: 12, borderRadius: 6, border: '1px solid #ddd', resize: 'vertical' }}
+          />
+        </div>
+        <div style={{ textAlign: 'right' }}>
+          <SecondaryButton
+            onClick={() => { setShowTermsModal(false); setNewTerms(''); }}
+            style={{ marginRight: 12 }}
+          >
+            취소
+          </SecondaryButton>
+          <PrimaryButton
+            onClick={handleAddTerms}
+          >
+            추가
+          </PrimaryButton>
+        </div>
+      </Modal>
       <Modal
-        visible={showPrivacyModal}
-        onClose={() => { setShowPrivacyModal(false); setNewPrivacy(''); }}
-        onConfirm={handleAddPrivacy}
-        value={newPrivacy}
-        setValue={setNewPrivacy}
+        show={showPrivacyModal}
+        onHide={() => { setShowPrivacyModal(false); setNewPrivacy(''); }}
         title="개인정보 처리방침 추가"
-        placeholder="새 개인정보 처리방침 내용을 입력하세요"
-      />
+      >
+        <div style={{ marginBottom: 24 }}>
+          <textarea
+            value={newPrivacy}
+            onChange={e => setNewPrivacy(e.target.value)}
+            placeholder="새 개인정보 처리방침 내용을 입력하세요"
+            style={{ width: '100%', minHeight: 200, fontSize: 15, padding: 12, borderRadius: 6, border: '1px solid #ddd', resize: 'vertical' }}
+          />
+        </div>
+        <div style={{ textAlign: 'right' }}>
+          <SecondaryButton
+            onClick={() => { setShowPrivacyModal(false); setNewPrivacy(''); }}
+            style={{ marginRight: 12 }}
+          >
+            취소
+          </SecondaryButton>
+          <PrimaryButton
+            onClick={handleAddPrivacy}
+          >
+            추가
+          </PrimaryButton>
+        </div>
+      </Modal>
 
       {/* 탭별 내용 */}
       {activeTab === 'terms' && (
         <>
           <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', margin: '0 0 16px 0' }}>
-            <button
+            <PrimaryButton
               onClick={() => setShowTermsModal(true)}
-              style={{ padding: '8px 28px', background: '#3366ff', color: '#fff', border: 'none', borderRadius: 4, fontWeight: 'bold', fontSize: 16, cursor: 'pointer' }}
+              style={{ fontWeight: 'bold', fontSize: 16 }}
             >
               추가
-            </button>
+            </PrimaryButton>
           </div>
           <Card style={{ padding: 24, minWidth: 350, height: 500, display: 'flex', flexDirection: 'column' }}>
             <div style={{ fontWeight: 'bold', fontSize: 18, marginBottom: 12 }}>이용약관</div>
@@ -237,13 +238,21 @@ const Terms = () => {
                   <div style={{ display: 'flex', gap: 8 }}>
                     {editTermsId === item.id ? (
                       <>
-                        <button onClick={() => handleSaveEditTerms(item.id)} style={{ marginRight: 0, background: '#3366ff', color: '#fff', border: 'none', borderRadius: 4, padding: '6px 16px', fontWeight: 'bold', cursor: 'pointer' }}>저장</button>
-                        <button onClick={() => setEditTermsId(null)} style={{ background: '#eee', color: '#333', border: 'none', borderRadius: 4, padding: '6px 16px', fontWeight: 'bold', cursor: 'pointer' }}>취소</button>
+                        <PrimaryButton onClick={() => handleSaveEditTerms(item.id)} style={{ marginRight: 8 }}>
+                          저장
+                        </PrimaryButton>
+                        <SecondaryButton onClick={() => setEditTermsId(null)}>
+                          취소
+                        </SecondaryButton>
                       </>
                     ) : (
                       <>
-                        <button onClick={() => handleEditTerms(item.id, item.contents)} style={{ marginRight: 0, background: '#3366ff', color: '#fff', border: 'none', borderRadius: 4, padding: '6px 16px', fontWeight: 'bold', cursor: 'pointer' }}>수정</button>
-                        <button onClick={() => handleDeleteTerms(item.id)} style={{ background: '#ff4d4f', color: '#fff', border: 'none', borderRadius: 4, padding: '6px 16px', fontWeight: 'bold', cursor: 'pointer' }}>삭제</button>
+                        <PrimaryButton onClick={() => handleEditTerms(item.id, item.contents)} style={{ marginRight: 8 }}>
+                          수정
+                        </PrimaryButton>
+                        <SecondaryButton onClick={() => handleDeleteTerms(item.id)} style={{ background: '#ff4d4f', color: '#fff' }}>
+                          삭제
+                        </SecondaryButton>
                       </>
                     )}
                   </div>
@@ -269,12 +278,12 @@ const Terms = () => {
       {activeTab === 'privacy' && (
         <>
           <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', margin: '0 0 16px 0' }}>
-            <button
+            <PrimaryButton
               onClick={() => setShowPrivacyModal(true)}
-              style={{ padding: '8px 28px', background: '#3366ff', color: '#fff', border: 'none', borderRadius: 4, fontWeight: 'bold', fontSize: 16, cursor: 'pointer' }}
+              style={{ fontWeight: 'bold', fontSize: 16 }}
             >
               추가
-            </button>
+            </PrimaryButton>
           </div>
           <Card style={{ padding: 24, minWidth: 350, height: 500, display: 'flex', flexDirection: 'column' }}>
             <div style={{ fontWeight: 'bold', fontSize: 18, marginBottom: 12 }}>개인정보 처리방침</div>
@@ -288,13 +297,21 @@ const Terms = () => {
                   <div style={{ display: 'flex', gap: 8 }}>
                     {editPrivacyId === item.id ? (
                       <>
-                        <button onClick={() => handleSaveEditPrivacy(item.id)} style={{ marginRight: 0, background: '#3366ff', color: '#fff', border: 'none', borderRadius: 4, padding: '6px 16px', fontWeight: 'bold', cursor: 'pointer' }}>저장</button>
-                        <button onClick={() => setEditPrivacyId(null)} style={{ background: '#eee', color: '#333', border: 'none', borderRadius: 4, padding: '6px 16px', fontWeight: 'bold', cursor: 'pointer' }}>취소</button>
+                        <PrimaryButton onClick={() => handleSaveEditPrivacy(item.id)} style={{ marginRight: 8 }}>
+                          저장
+                        </PrimaryButton>
+                        <SecondaryButton onClick={() => setEditPrivacyId(null)}>
+                          취소
+                        </SecondaryButton>
                       </>
                     ) : (
                       <>
-                        <button onClick={() => handleEditPrivacy(item.id, item.contents)} style={{ marginRight: 0, background: '#3366ff', color: '#fff', border: 'none', borderRadius: 4, padding: '6px 16px', fontWeight: 'bold', cursor: 'pointer' }}>수정</button>
-                        <button onClick={() => handleDeletePrivacy(item.id)} style={{ background: '#ff4d4f', color: '#fff', border: 'none', borderRadius: 4, padding: '6px 16px', fontWeight: 'bold', cursor: 'pointer' }}>삭제</button>
+                        <PrimaryButton onClick={() => handleEditPrivacy(item.id, item.contents)} style={{ marginRight: 8 }}>
+                          수정
+                        </PrimaryButton>
+                        <SecondaryButton onClick={() => handleDeletePrivacy(item.id)} style={{ background: '#ff4d4f', color: '#fff' }}>
+                          삭제
+                        </SecondaryButton>
                       </>
                     )}
                   </div>
