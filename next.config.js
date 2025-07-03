@@ -16,7 +16,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   async rewrites() {
-    const paths = ['/auth/:path', '/laundry', '/laundry/:path*'];
+    const paths = ['/API/:path*'];
 
     return paths.map((path) => ({
       source: path,

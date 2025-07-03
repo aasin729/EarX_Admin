@@ -19,7 +19,7 @@ export default function Header() {
   const [user, setUser] = useState({
     company: '',
     name: '',
-    role: '세탁업체',
+    role: 'EarX 관리자',
   });
 
 
@@ -29,7 +29,7 @@ export default function Header() {
   const { logoutAction, getAction } = useFetch();
 
   const getMyInfo = async () => {
-    const res = await getAction('/auth/me');
+    const res = await getAction('/API/admin/me');
     if (res) {
       // (res.status === 401 || res.detail === 'Signature has expired') &&
       //   logoutAction(res.status);
@@ -37,7 +37,7 @@ export default function Header() {
       setUser({
         ...user,
         company: res.company_info?.name,
-        name: res.username,
+        name: res.name,
       });
     }
   };
@@ -50,13 +50,13 @@ export default function Header() {
       <div className="main-container container-fluid">
         <div className="ms-auto me-4">
           <div className="main-header-right">
-            <div className="d-flex align-items-center gap-2 me-2">
-              {user.company} <Badge>{user.role}</Badge> {user.name}님
-              환영합니다.
+            <div className="d-flex align-items-center gap-2 me-4">
+            {user.company} <Badge>{user.role}</Badge> <span style={{ color: '#007bff', fontWeight: 'bold' }}>{user.name}</span>님
+            환영합니다!
             </div>
-            <Link href="/profile" className="profile-wrapper">
+            {/* <Link href="/profile" className="profile-wrapper">
               <RiUserHeartLine className="fs-5" />
-            </Link>
+            </Link> */}
             <DefaultButton
               onClick={() => {
                 confirm('로그아웃', '로그아웃 하시겠습니까?').then((result) => {
@@ -68,7 +68,7 @@ export default function Header() {
                 });
               }}
             >
-              <FiLogOut className="fw-bolder fs-5 ms-3" />
+              LogOut <FiLogOut className="fw-bolder fs-5" />
             </DefaultButton>
           </div>
         </div>

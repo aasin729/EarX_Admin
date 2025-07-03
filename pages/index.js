@@ -47,7 +47,6 @@ export default function Home() {
   const [data, setData] = useState({
     email: '',
     password: '',
-    user_type: '세탁업체',
   });
 
   const { email, password } = data;
@@ -69,26 +68,31 @@ export default function Home() {
 
   const ReactLogin = async () => {
     try {
-      const response = await loginAction('/auth/login', data);
-      console.log(response);
+      // base URL 환경변수 사용 예시 (loginAction 내부에서 처리될 수도 있음)
+      // const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+      // const response = await loginAction(`${baseUrl}/API/admin/login`, {
+      //   email: data.email,
+      //   password: data.password,
+      // });
+      // 만약 loginAction이 base URL을 자동으로 붙여주면 아래처럼 사용
+      const response = await loginAction('/API/admin/login', {
+        email: data.email,
+        password: data.password,
+      });
 
-      if (response.dataStatus !== 200) {
-        setError('이메일 또는 비밀번호를 확인하여 주십시오.');
-      } else {
+      if (response.token && response.token.access_token) {
         setLoading(true);
-        routeChange(response.user.is_first);
+        routeChange();
         dispatch(
           LOGIN_USER({
-            email: data.email,
-            role: response.user.user_type,
-            id: response.user.id,
-            name: response.user.username,
-            company: response.user.company_info.name,
-            phone: response.user.user_phone,
-            companyId: response.user.company_info.id,
-            access_token: response.access_token,
-          }),
+            email: response.admin.email,
+            name: response.admin.name,
+            access_token: response.token.access_token,
+            // 필요시 추가 정보: refresh_token 등
+          })
         );
+      } else {
+        setError('이메일 또는 비밀번호를 확인하여 주십시오.');
       }
     } catch (error) {
       console.error('Login error:', error);

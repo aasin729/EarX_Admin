@@ -3,6 +3,18 @@ import { LOGOUT_USER } from '../redux/actions/action';
 import { useRouter } from 'next/router';
 import { useSwal } from './useSwal';
 
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+function buildUrl(url) {
+  // 개발 환경에서는 프록시를 위해 base URL을 붙이지 않음
+  if (process.env.NODE_ENV === 'development') {
+    return url;
+  }
+  // production에서는 base URL을 붙임
+  if (/^https?:\/\//.test(url)) return url;
+  return `${BASE_URL}${url}`;
+}
+
 const useFetch = () => {
   const dispatch = useDispatch();
   const { push, pathname } = useRouter();
@@ -15,7 +27,7 @@ const useFetch = () => {
 
   const loginAction = async (url, data) => {
     try {
-      const res = await fetch(url, {
+      const res = await fetch(buildUrl(url), {
         method: 'post',
         body: JSON.stringify(data),
         Accept: 'application/json',
@@ -40,7 +52,7 @@ const useFetch = () => {
           status === 401 ? noAuthenticationMessage : expiredMessage,
         );
       }
-      const res = await fetch('/auth/logout', {
+      const res = await fetch(buildUrl('/auth/logout'), {
         method: 'post',
         credentials: 'include',
       });
@@ -61,7 +73,7 @@ const useFetch = () => {
   };
   const postAction = async (url, data) => {
     try {
-      const res = await fetch(url, {
+      const res = await fetch(buildUrl(url), {
         method: 'post',
         body: data instanceof FormData ? data : JSON.stringify(data),
         headers: {
@@ -86,7 +98,7 @@ const useFetch = () => {
 
   const getAction = async (url) => {
     try {
-      const res = await fetch(url, {
+      const res = await fetch(buildUrl(url), {
         method: 'get',
         Accept: 'application/json',
         headers: { 'Content-Type': 'application/json' },
@@ -107,7 +119,7 @@ const useFetch = () => {
 
   const putAction = async (url, data) => {
     try {
-      const res = await fetch(url, {
+      const res = await fetch(buildUrl(url), {
         method: 'put',
         body: data instanceof FormData ? data : JSON.stringify(data),
         headers:
@@ -130,7 +142,7 @@ const useFetch = () => {
 
   const removeAction = async (url) => {
     try {
-      const res = await fetch(url, {
+      const res = await fetch(buildUrl(url), {
         method: 'delete',
         credentials: 'include',
       });

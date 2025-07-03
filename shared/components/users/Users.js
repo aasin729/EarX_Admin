@@ -1,48 +1,33 @@
 import { Card } from '@/shared/layout-components/spaces/SpacesComponenet';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import GridComponent from '../GridComponent';
 import usersMockData from '@/shared/components/users/usersMockData';
 import { InputWrapper } from '@/shared/layout-components/styles/input';
 import SelectBox from '../SelectBox';
+import useFetch from '@/shared/hooks/useFetch';
+import { PrimaryButton, SecondaryButton } from '@/shared/layout-components/styles/button';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import { useSwal } from '@/shared/hooks/useSwal';
 
 const LOGIN_TYPE_OPTIONS = [
-  { value: '', label: '로그인타입' },
+  { value: '', label: '전체' },
   { value: 0, label: 'EARX APP' },
   { value: 1, label: '구글' },
   { value: 2, label: 'IOS' },
 ];
 const DELETE_OPTIONS = [
-  { value: '', label: '삭제여부' },
+  { value: '', label: '전체' },
   { value: 'true', label: '삭제' },
   { value: 'false', label: '미삭제' },
 ];
 
 const Users = () => {
-  // Mock user data
-  const initData = [
-    { id: 1, login_type: 1, name: '홍길동', email: 'test@test.com', created_at: '2024-01-01T10:00:00', is_deleted: true, deleted_at: '2025-03-06T22:46:37' },
-    { id: 2, login_type: 2, name: '김철수', email: 'test2@test.com', created_at: '2024-01-02T11:00:00', is_deleted: false, deleted_at: null },
-    { id: 3, login_type: 0, name: '이영희', email: 'lee@test.com', created_at: '2024-01-03T12:00:00', is_deleted: false, deleted_at: null },
-    { id: 4, login_type: 1, name: '박민수', email: 'park@test.com', created_at: '2024-01-04T13:00:00', is_deleted: true, deleted_at: '2024-05-10T09:30:00' },
-    { id: 5, login_type: 2, name: '최지우', email: 'choi@test.com', created_at: '2024-01-05T14:00:00', is_deleted: false, deleted_at: null },
-    { id: 6, login_type: 0, name: '정해인', email: 'jung@test.com', created_at: '2024-01-06T15:00:00', is_deleted: false, deleted_at: null },
-    { id: 7, login_type: 1, name: '한가인', email: 'han@test.com', created_at: '2024-01-07T16:00:00', is_deleted: true, deleted_at: '2024-06-01T08:00:00' },
-    { id: 8, login_type: 2, name: '서강준', email: 'seo@test.com', created_at: '2024-01-08T17:00:00', is_deleted: false, deleted_at: null },
-    { id: 9, login_type: 1, name: null, email: 'sidversion9@gmail.com', created_at: '2024-01-09T18:00:00', is_deleted: false, deleted_at: null },
-    { id: 10, login_type: 0, name: '오나미', email: 'oh@test.com', created_at: '2024-01-10T19:00:00', is_deleted: false, deleted_at: null },
-    { id: 11, login_type: 2, name: '유재석', email: 'yoo@test.com', created_at: '2024-01-11T20:00:00', is_deleted: true, deleted_at: '2024-07-15T10:10:00' },
-    { id: 12, login_type: 1, name: '강호동', email: 'kang@test.com', created_at: '2024-01-12T21:00:00', is_deleted: false, deleted_at: null },
-    { id: 13, login_type: 0, name: '신동엽', email: 'shin@test.com', created_at: '2024-01-13T22:00:00', is_deleted: false, deleted_at: null },
-    { id: 14, login_type: 2, name: '이수근', email: 'lee2@test.com', created_at: '2024-01-14T23:00:00', is_deleted: true, deleted_at: '2024-08-20T11:20:00' },
-    { id: 15, login_type: 1, name: '박나래', email: 'park2@test.com', created_at: '2024-01-15T09:00:00', is_deleted: false, deleted_at: null },
-    { id: 16, login_type: 0, name: '장도연', email: 'jang@test.com', created_at: '2024-01-16T08:00:00', is_deleted: false, deleted_at: null },
-    { id: 17, login_type: 2, name: '김종국', email: 'kim@test.com', created_at: '2024-01-17T07:00:00', is_deleted: true, deleted_at: '2024-09-25T12:30:00' },
-    { id: 18, login_type: 1, name: '하하', email: 'haha@test.com', created_at: '2024-01-18T06:00:00', is_deleted: false, deleted_at: null },
-    { id: 19, login_type: 0, name: '송은이', email: 'song@test.com', created_at: '2024-01-19T05:00:00', is_deleted: false, deleted_at: null },
-    { id: 20, login_type: 2, name: '김숙', email: 'kimsook@test.com', created_at: '2024-01-20T04:00:00', is_deleted: true, deleted_at: '2024-10-30T13:40:00' },
-  ];
+  const { getAction, removeAction } = useFetch();
+  const swal = useSwal();
 
+  // 실제 데이터 상태
+  const [userData, setUserData] = useState([]);
   // 필터 상태
   const [filter, setFilter] = useState({
     name: '',
@@ -54,22 +39,43 @@ const Users = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [clearSelection, setClearSelection] = useState(false);
+  const [selectedRows, setSelectedRows] = useState([]);
   const router = useRouter();
+
+  // API 호출 (마운트 시)
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const res = await getAction('/API/user?limit=10000');
+      if (res && res.users) {
+        console.log('API에서 받은 유저 수:', res.users.length);
+        setUserData(res.users);
+      }
+    };
+    fetchUsers();
+  }, []);
 
   // 필터링된 데이터
   const filteredData = useMemo(() => {
-    return initData.filter((row) => {
+    return userData.filter((row) => {
       // 이름
       if (filter.name && !(row.name || '').includes(filter.name)) return false;
       // 이메일
       if (filter.email && !(row.email || '').includes(filter.email)) return false;
       // 로그인타입
-      if (filter.login_type !== '' && String(row.login_type) !== String(filter.login_type)) return false;
+      if (filter.login_type !== '' && String(row.login_type ?? '') !== String(filter.login_type)) return false;
       // 삭제여부
       if (filter.is_deleted !== '' && String(row.is_deleted) !== filter.is_deleted) return false;
       return true;
     });
-  }, [initData, filter]);
+  }, [userData, filter]);
+
+  useEffect(() => {
+    console.log('API에서 받은 유저 수:', userData.length);
+    console.log('현재 로그인타입 필터 값:', filter.login_type);
+    console.log('필터링 후 유저 수:', filteredData.length);
+    console.log('userData 중 login_type이 null인 개수:', userData.filter(u => u.login_type == null).length);
+    console.log('filteredData 중 login_type이 null인 개수:', filteredData.filter(u => u.login_type == null).length);
+  }, [userData, filter, filteredData]);
 
   // 페이징된 데이터
   const pagedData = useMemo(() => {
@@ -167,6 +173,61 @@ const Users = () => {
     setFilter((prev) => ({ ...prev, [name]: value }));
   };
 
+  // 수정 버튼 핸들러
+  const handleEdit = () => {
+    if (selectedRows.length === 0) return alert('수정할 사용자를 선택하세요.');
+    if (selectedRows.length > 1) {
+      swal.error('수정 불가', '수정은 한 명만 선택할 수 있습니다.');
+      return;
+    }
+    alert('수정: ' + selectedRows.map(row => row.id).join(', '));
+  };
+
+  // 삭제 버튼 핸들러
+  const handleDelete = async () => {
+    if (selectedRows.length === 0) return alert('삭제할 사용자를 선택하세요.');
+
+    // 확인 모달 (swal.confirm이 없으면 window.confirm 사용)
+    let confirmResult = true;
+    if (swal.confirm) {
+      confirmResult = await swal.confirm('삭제 확인', '정말로 삭제하시겠습니까?');
+    } else {
+      confirmResult = window.confirm('정말로 삭제하시겠습니까?');
+    }
+    if (!confirmResult) return;
+
+    for (const row of selectedRows) {
+      const res = await removeAction(`/API/user/${row.id}`);
+      if (res && res.detail && res.user_id) {
+        if (swal.success) {
+          swal.success('삭제 완료', '삭제가 정상적으로 이루어졌습니다');
+        } else {
+          alert('삭제가 정상적으로 이루어졌습니다');
+        }
+        setUserData(prev => prev.filter(user => user.id !== row.id));
+      } else {
+        if (swal.error) {
+          swal.error('삭제 실패', '삭제가 실패했습니다');
+        } else {
+          alert('삭제가 실패했습니다');
+        }
+      }
+    }
+    setSelectedRows([]); // 선택 해제
+  };
+
+  // 수정/삭제 버튼 묶음
+  const extraButton = (
+    <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', gap: 8 }}>
+      <PrimaryButton onClick={handleEdit} disabled={selectedRows.length === 0}>
+        <FaEdit style={{ marginRight: 4 }} /> 수정
+      </PrimaryButton>
+      <SecondaryButton onClick={handleDelete} disabled={selectedRows.length === 0} bordered>
+        <FaTrash style={{ marginRight: 4 }} /> 삭제
+      </SecondaryButton>
+    </div>
+  );
+
   return (
     <Card overflow="visible">
       <style>{`.placeholder-option { color: #888 !important; }`}</style>
@@ -186,24 +247,30 @@ const Users = () => {
           onChange={handleFilterChange}
           style={{ width: '180px' }}
         />
-        <SelectBox
-          name="login_type"
-          value={LOGIN_TYPE_OPTIONS.find(opt => String(opt.value) === String(filter.login_type))}
-          options={LOGIN_TYPE_OPTIONS}
-          onChange={opt => handleSelectChange('login_type', opt.value)}
-          placeholder="로그인타입"
-          styles={{ container: base => ({ ...base, width: 150 }) }}
-          isSearchable={false}
-        />
-        <SelectBox
-          name="is_deleted"
-          value={DELETE_OPTIONS.find(opt => String(opt.value) === String(filter.is_deleted))}
-          options={DELETE_OPTIONS}
-          onChange={opt => handleSelectChange('is_deleted', opt.value)}
-          placeholder="삭제여부"
-          styles={{ container: base => ({ ...base, width: 150 }) }}
-          isSearchable={false}
-        />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <div style={{ fontSize: 12, color: '#555', minWidth: 60 }}>로그인타입</div>
+          <SelectBox
+            name="login_type"
+            value={LOGIN_TYPE_OPTIONS.find(opt => String(opt.value) === String(filter.login_type ?? ''))}
+            options={LOGIN_TYPE_OPTIONS}
+            onChange={opt => handleSelectChange('login_type', opt.value)}
+            placeholder="로그인타입"
+            styles={{ container: base => ({ ...base, width: 150 }) }}
+            isSearchable={false}
+          />
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <div style={{ fontSize: 12, color: '#555', minWidth: 60 }}>삭제 여부</div>
+          <SelectBox
+            name="is_deleted"
+            value={DELETE_OPTIONS.find(opt => String(opt.value) === String(filter.is_deleted))}
+            options={DELETE_OPTIONS}
+            onChange={opt => handleSelectChange('is_deleted', opt.value)}
+            placeholder="삭제여부"
+            styles={{ container: base => ({ ...base, width: 150 }) }}
+            isSearchable={false}
+          />
+        </div>
       </div>
       {/* 합계 표시 */}
       <div style={{ marginBottom: '0.5rem', fontWeight: 'bold', fontSize: '1rem' }}>
@@ -217,11 +284,14 @@ const Users = () => {
         fitRowWidth
         clearSelection={clearSelection}
         onClearSelection={() => setClearSelection(false)}
-        showCheckboxes={false}
+        showCheckboxes={true}
+        selection={true}
+        setSelectionArray={setSelectedRows}
         noPagination={false}
         listLength={filteredData.length}
         onChangePerPage={setPageSize}
         changePageAction={(page, size) => setCurrentPage(page)}
+        extraButton={extraButton}
       />
     </Card>
   );
